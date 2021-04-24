@@ -2,8 +2,14 @@
 import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/context';
 import {getJsonSchemaRef, post} from '@loopback/openapi-v3';
-import {repository} from '@loopback/repository';
-import {get, requestBody} from '@loopback/rest';
+import {Filter, FilterExcludingWhere, repository} from '@loopback/repository';
+import {
+  get,
+  getModelSchemaRef,
+  param,
+  requestBody,
+  response,
+} from '@loopback/rest';
 import {UserProfile} from '@loopback/security';
 import * as _ from 'lodash';
 import {
@@ -48,6 +54,7 @@ export class UserController {
     userData.password = await this.hasher.hashPassword(userData.password);
 
     const user = await this.userRepository.create(userData);
+
     return user;
   }
 
@@ -87,5 +94,28 @@ export class UserController {
     currentUser: UserProfile,
   ): Promise<UserProfile> {
     return Promise.resolve(currentUser);
+  }
+
+  @get('/users')
+  @authenticate('jwt') // FAZER O MULTI TENANCY
+  async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
+    return this.userRepository.find({include: [{relation: 'tenant'}]});
+  }
+
+  @get('/users/{id}')
+  @response(200, {
+    description: 'User model instance',
+    content: {
+      'application/json': {
+        schema: getModelSchemaRef(User, {includeRelations: true}),
+      },
+    },
+  })
+  async findById(
+    @param.path.number('id') id: number,
+    @param.filter(User, {exclude: 'where'})
+    filter?: FilterExcludingWhere<User>,
+  ): Promise<User> {
+    return this.userRepository.findById(id, {include: [{relation: 'tenant'}]});
   }
 }

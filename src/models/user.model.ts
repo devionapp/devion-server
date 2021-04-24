@@ -1,6 +1,19 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Tenant} from './tenant.model';
 
-@model()
+@model({
+  settings: {
+    strict: false,
+    foreignKeys: {
+      tenantId: {
+        name: 'fk_tenantId',
+        entity: 'Tenant',
+        entityKey: 'id',
+        foreignKey: 'tenantId',
+      },
+    },
+  },
+})
 export class User extends Entity {
   @property({
     type: 'number',
@@ -35,6 +48,13 @@ export class User extends Entity {
     required: true,
   })
   password: string;
+
+  @belongsTo(() => Tenant)
+  tenantId: number;
+
+  // Indexer property to allow additional data
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  [prop: string]: any;
 
   constructor(data?: Partial<User>) {
     super(data);

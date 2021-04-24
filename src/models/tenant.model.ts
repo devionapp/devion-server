@@ -12,6 +12,9 @@ export class Tenant extends Entity {
   @property({
     type: 'string',
     required: true,
+    index: {
+      unique: true,
+    },
   })
   name: string;
 

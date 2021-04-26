@@ -19,11 +19,11 @@ import {
   TokenServiceConstants,
   UserServiceBindings,
 } from './keys';
+import {log} from './middleware/log.middleware';
 import {MySequence} from './sequence';
 import {BcryptHasher} from './services/hash.password.bcrypt';
 import {JWTService} from './services/jwt-service';
 import {MyUserService} from './services/user-service';
-
 export {ApplicationConfig};
 
 export class DevionServerApplication extends BootMixin(
@@ -49,6 +49,8 @@ export class DevionServerApplication extends BootMixin(
       path: '/explorer',
     });
     this.component(RestExplorerComponent);
+
+    this.middleware(log);
 
     this.projectRoot = __dirname;
     // Customize @loopback/boot Booter Conventions here

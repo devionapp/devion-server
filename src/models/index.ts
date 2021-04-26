@@ -5,3 +5,5 @@ export * from './role.model';
 export * from './user-skill.model';
 export * from './permission.model';
 export * from './role-permission.model';
+export * from './project.model';
+export * from './requirement.model';

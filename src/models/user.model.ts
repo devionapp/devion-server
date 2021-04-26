@@ -15,7 +15,7 @@ import {UserSkill} from './user-skill.model';
     strict: false,
     foreignKeys: {
       tenantId: {
-        name: 'fk_tenantId',
+        name: 'fk_user_tenantId',
         entity: 'Tenant',
         entityKey: 'id',
         foreignKey: 'tenantId',

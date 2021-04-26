@@ -11,7 +11,7 @@ export class JWTStrategy implements AuthenticationStrategy {
     public jwtService: JWTService,
   ) {}
   name = 'jwt';
-  async authenticate(request: Request): Promise<UserProfile | undefined> {
+  async authenticate(request: Request): Promise<UserProfile> {
     const token: string = this.extractCredentials(request);
     const userProfile = await this.jwtService.verifyToken(token);
     return Promise.resolve(userProfile);

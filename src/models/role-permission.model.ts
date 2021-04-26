@@ -5,13 +5,13 @@ import {Entity, model, property} from '@loopback/repository';
     strict: false,
     foreignKeys: {
       roleId: {
-        name: 'fk_role-permission_roleId',
+        name: 'fk_role_permission_roleId',
         entity: 'Role',
         entityKey: 'id',
         foreignKey: 'roleId',
       },
       permissionId: {
-        name: 'fk_role-permission_permissionId',
+        name: 'fk_role_permission_permissionId',
         entity: 'Permission',
         entityKey: 'id',
         foreignKey: 'permissionId',

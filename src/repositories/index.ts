@@ -5,3 +5,5 @@ export * from './role.repository';
 export * from './user-skill.repository';
 export * from './permission.repository';
 export * from './role-permission.repository';
+export * from './project.repository';
+export * from './requirement.repository';

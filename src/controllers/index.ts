@@ -5,3 +5,5 @@ export * from './user-tenant.controller';
 export * from './user-role.controller';
 export * from './user-skill.controller';
 export * from './role-permission.controller';
+export * from './project-requirement.controller';
+export * from './tenant-project.controller';

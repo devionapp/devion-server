@@ -10,7 +10,6 @@ import {
   requestBody,
   response,
 } from '@loopback/rest';
-import {UserProfile} from '@loopback/security';
 import * as _ from 'lodash';
 import {
   PasswordHasherBindings,
@@ -91,18 +90,31 @@ export class UserController {
   @authenticate('jwt')
   async me(
     @inject(AuthenticationBindings.CURRENT_USER)
-    currentUser: UserProfile,
-  ): Promise<UserProfile> {
+    currentUser: User,
+  ): Promise<User> {
     return Promise.resolve(currentUser);
   }
 
   @get('/users')
   @authenticate('jwt') // FAZER O MULTI TENANCY
-  async find(@param.filter(User) filter?: Filter<User>): Promise<User[]> {
-    return this.userRepository.find({include: [{relation: 'tenant'}]});
+  async find(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
+    @param.filter(User)
+    filter?: Filter<User>,
+  ): Promise<User[]> {
+    const {tenantId} = await this.findById(currentUser.id);
+
+    return this.userRepository.find({
+      where: {
+        tenantId: tenantId,
+      },
+      fields: {password: false},
+    });
   }
 
   @get('/users/{id}')
+  @authenticate('jwt') // FAZER O MULTI TENANCY
   @response(200, {
     description: 'User model instance',
     content: {
@@ -116,6 +128,17 @@ export class UserController {
     @param.filter(User, {exclude: 'where'})
     filter?: FilterExcludingWhere<User>,
   ): Promise<User> {
-    return this.userRepository.findById(id, {include: [{relation: 'tenant'}]});
+    return this.userRepository.findById(id, {
+      fields: {password: false},
+      include: [
+        {relation: 'tenant'},
+        {
+          relation: 'role',
+          scope: {
+            include: ['permissions'],
+          },
+        },
+      ],
+    });
   }
 }

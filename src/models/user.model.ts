@@ -1,5 +1,14 @@
-import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {
+  belongsTo,
+  Entity,
+  hasMany,
+  model,
+  property,
+} from '@loopback/repository';
+import {Role} from './role.model';
+import {Skill} from './skill.model';
 import {Tenant} from './tenant.model';
+import {UserSkill} from './user-skill.model';
 
 @model({
   settings: {
@@ -10,6 +19,12 @@ import {Tenant} from './tenant.model';
         entity: 'Tenant',
         entityKey: 'id',
         foreignKey: 'tenantId',
+      },
+      roleId: {
+        name: 'fk_roleId',
+        entity: 'Role',
+        entityKey: 'id',
+        foreignKey: 'roleId',
       },
     },
   },
@@ -52,6 +67,11 @@ export class User extends Entity {
   @belongsTo(() => Tenant)
   tenantId: number;
 
+  @belongsTo(() => Role)
+  roleId: number;
+
+  @hasMany(() => Skill, {through: {model: () => UserSkill}})
+  skills: Skill[];
   // Indexer property to allow additional data
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;

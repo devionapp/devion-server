@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, hasMany} from '@loopback/repository';
+import {Permission} from './permission.model';
+import {RolePermission} from './role-permission.model';
 
 @model({settings: {strict: false}})
 export class Role extends Entity {
@@ -15,6 +17,8 @@ export class Role extends Entity {
   })
   name: string;
 
+  @hasMany(() => Permission, {through: {model: () => RolePermission}})
+  permissions: Permission[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

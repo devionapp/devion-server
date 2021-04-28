@@ -41,9 +41,11 @@ export class MyUserService implements UserService<User, Credentials> {
 
   convertToUserProfile(user: User): UserProfile {
     let userName = '';
+
     if (user.firstName) {
       userName = user.firstName;
     }
+
     if (user.lastName) {
       userName = user.firstName
         ? `${user.firstName} ${user.lastName}`

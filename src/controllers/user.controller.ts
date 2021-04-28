@@ -4,9 +4,12 @@ import {inject} from '@loopback/context';
 import {getJsonSchemaRef, post} from '@loopback/openapi-v3';
 import {Filter, FilterExcludingWhere, repository} from '@loopback/repository';
 import {
+  del,
   get,
   getModelSchemaRef,
   param,
+  patch,
+  put,
   requestBody,
   response,
 } from '@loopback/rest';
@@ -79,7 +82,21 @@ export class UserController {
   async login(
     @requestBody() credentials: Credentials,
   ): Promise<{token: string}> {
-    const user = await this.userService.verifyCredentials(credentials);
+    let user = await this.userService.verifyCredentials(credentials);
+
+    user = await this.userRepository.findById(user.id, {
+      fields: {password: false},
+      include: [
+        {relation: 'tenant'},
+        {
+          relation: 'role',
+          scope: {
+            include: ['permissions'],
+          },
+        },
+      ],
+    });
+
     const userProfile = this.userService.convertToUserProfile(user);
     const token = await this.jwtService.generateToken(userProfile);
 
@@ -140,5 +157,42 @@ export class UserController {
         },
       ],
     });
+  }
+
+  @patch('/users/{id}')
+  @response(204, {
+    description: 'User PATCH success',
+  })
+  async updateById(
+    @param.path.number('id') id: number,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(User, {partial: true}),
+        },
+      },
+    })
+    user: User,
+  ): Promise<void> {
+    await this.userRepository.updateById(id, user);
+  }
+
+  @put('/users/{id}')
+  @response(204, {
+    description: 'User PUT success',
+  })
+  async replaceById(
+    @param.path.number('id') id: number,
+    @requestBody() user: User,
+  ): Promise<void> {
+    await this.userRepository.replaceById(id, user);
+  }
+
+  @del('/users/{id}')
+  @response(204, {
+    description: 'User DELETE success',
+  })
+  async deleteById(@param.path.number('id') id: number): Promise<void> {
+    await this.userRepository.deleteById(id);
   }
 }

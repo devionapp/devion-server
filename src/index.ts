@@ -5,19 +5,6 @@ export * from './application';
 export async function main(options: ApplicationConfig = {}) {
   const app = new DevionServerApplication(options);
   await app.boot();
-  await app.migrateSchema({
-    models: [
-      'Tenant',
-      'Role',
-      'Permission',
-      'RolePermission',
-      'Project',
-      'Requirement',
-      'User',
-      'Skill',
-      'UserSkill',
-    ],
-  });
   await app.start();
 
   const url = app.restServer.url;

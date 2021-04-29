@@ -61,7 +61,7 @@ export class User extends Entity {
   @property({
     type: 'date',
   })
-  dataNascimento?: string;
+  birthday?: string;
 
   @property({
     type: 'string',

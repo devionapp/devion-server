@@ -59,9 +59,26 @@ export class User extends Entity {
   email: string;
 
   @property({
+    type: 'date',
+  })
+  dataNascimento?: string;
+
+  @property({
     type: 'string',
   })
   password: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  created?: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  modified?: string;
 
   @belongsTo(() => Tenant)
   tenantId: number;

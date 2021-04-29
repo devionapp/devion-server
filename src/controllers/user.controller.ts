@@ -1,12 +1,14 @@
 // Uncomment these imports to begin using these cool features!
 import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/context';
+import {intercept} from '@loopback/core';
 import {getJsonSchemaRef, post} from '@loopback/openapi-v3';
 import {Filter, FilterExcludingWhere, repository} from '@loopback/repository';
 import {
   del,
   get,
   getModelSchemaRef,
+  HttpErrors,
   param,
   patch,
   put,
@@ -14,6 +16,7 @@ import {
   response,
 } from '@loopback/rest';
 import * as _ from 'lodash';
+import {UserInterceptor} from '../interceptors';
 import {
   PasswordHasherBindings,
   TokenServiceBindings,
@@ -25,7 +28,7 @@ import {MyUserService} from '../services/user-service';
 import {validateCredentials} from '../services/validators';
 import {BcryptHasher} from './../services/hash.password.bcrypt';
 import {JWTService} from './../services/jwt-service';
-
+@intercept(UserInterceptor.BINDING_KEY)
 export class UserController {
   constructor(
     @repository(UserRepository)
@@ -160,6 +163,7 @@ export class UserController {
   }
 
   @patch('/users/{id}')
+  @authenticate('jwt') // FAZER O MULTI TENANCY
   @response(204, {
     description: 'User PATCH success',
   })
@@ -178,6 +182,7 @@ export class UserController {
   }
 
   @put('/users/{id}')
+  @authenticate('jwt') // FAZER O MULTI TENANCY
   @response(204, {
     description: 'User PUT success',
   })
@@ -185,14 +190,25 @@ export class UserController {
     @param.path.number('id') id: number,
     @requestBody() user: User,
   ): Promise<void> {
+    const userAux: User = await this.userRepository.findById(user.id);
+    if (!user.password) {
+      user.password = userAux.password;
+    }
     await this.userRepository.replaceById(id, user);
   }
 
   @del('/users/{id}')
+  @authenticate('jwt') // FAZER O MULTI TENANCY
   @response(204, {
     description: 'User DELETE success',
   })
   async deleteById(@param.path.number('id') id: number): Promise<void> {
+    const user: User = await this.userRepository.findById(id);
+    if (user.roleId === 1) {
+      throw new HttpErrors.Unauthorized(
+        'O Administrador nao pode ser deletado',
+      );
+    }
     await this.userRepository.deleteById(id);
   }
 }

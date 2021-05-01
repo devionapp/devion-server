@@ -7,3 +7,4 @@ export * from './user-skill.controller';
 export * from './role-permission.controller';
 export * from './project-requirement.controller';
 export * from './tenant-project.controller';
+export * from './project.controller';

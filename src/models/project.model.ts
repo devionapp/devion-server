@@ -22,30 +22,84 @@ export class Project extends Entity {
   id?: number;
 
   @property({
+    type: 'number',
+    required: true,
+  })
+  createdBy: number;
+
+  @property({
     type: 'string',
     required: true,
   })
   name: string;
 
   @property({
+    type: 'number',
+  })
+  tenantId?: number;
+
+  @property({
     type: 'string',
-    required: true,
+  })
+  description: string;
+
+  @property({
+    type: 'string',
   })
   type: string;
 
   @property({
-    type: 'number',
-    required: true,
+    type: 'string',
   })
-  createdBy: number;
+  baseUrl: string;
+
+  @property({
+    type: 'string',
+  })
+  baseUrlDev: string;
+
+  @property({
+    type: 'string',
+  })
+  baseUrlQa: string;
+
+  @property({
+    type: 'string',
+  })
+  repository: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  startDate?: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  finishDate?: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  forecastDate?: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  createdOn?: string;
+
+  @property({
+    type: 'date',
+    default: () => new Date(),
+  })
+  modified?: string;
 
   @hasMany(() => Requirement)
   requirements: Requirement[];
-
-  @property({
-    type: 'number',
-  })
-  tenantId?: number;
 
   constructor(data?: Partial<Project>) {
     super(data);

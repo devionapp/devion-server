@@ -13,14 +13,14 @@ import {
   patch,
   put,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import * as _ from 'lodash';
 import {UserInterceptor} from '../interceptors';
 import {
   PasswordHasherBindings,
   TokenServiceBindings,
-  UserServiceBindings,
+  UserServiceBindings
 } from '../keys';
 import {User} from '../models';
 import {Credentials, UserRepository} from '../repositories';
@@ -116,7 +116,7 @@ export class UserController {
   }
 
   @get('/users')
-  @authenticate('jwt') // FAZER O MULTI TENANCY
+  @authenticate('jwt')
   async find(
     @inject(AuthenticationBindings.CURRENT_USER)
     currentUser: User,
@@ -134,7 +134,7 @@ export class UserController {
   }
 
   @get('/users/{id}')
-  @authenticate('jwt') // FAZER O MULTI TENANCY
+  @authenticate('jwt')
   @response(200, {
     description: 'User model instance',
     content: {
@@ -163,7 +163,7 @@ export class UserController {
   }
 
   @patch('/users/{id}')
-  @authenticate('jwt') // FAZER O MULTI TENANCY
+  @authenticate('jwt')
   @response(204, {
     description: 'User PATCH success',
   })
@@ -178,11 +178,18 @@ export class UserController {
     })
     user: User,
   ): Promise<void> {
+    if(user.password){
+      // Valida se o formato do email esta correto e se a senha tem pelo menos 8 caracteres
+      validateCredentials(_.pick(user, ['email', 'password']));
+
+      // Criptografa a senha
+      user.password = await this.hasher.hashPassword(user.password);
+    }
     await this.userRepository.updateById(id, user);
   }
 
   @put('/users/{id}')
-  @authenticate('jwt') // FAZER O MULTI TENANCY
+  @authenticate('jwt')
   @response(204, {
     description: 'User PUT success',
   })
@@ -193,12 +200,18 @@ export class UserController {
     const userAux: User = await this.userRepository.findById(user.id);
     if (!user.password) {
       user.password = userAux.password;
+    }else{
+        // Valida se o formato do email esta correto e se a senha tem pelo menos 8 caracteres
+        validateCredentials(_.pick(user, ['email', 'password']));
+
+        // Criptografa a senha
+        user.password = await this.hasher.hashPassword(user.password);
     }
     await this.userRepository.replaceById(id, user);
   }
 
   @del('/users/{id}')
-  @authenticate('jwt') // FAZER O MULTI TENANCY
+  @authenticate('jwt')
   @response(204, {
     description: 'User DELETE success',
   })

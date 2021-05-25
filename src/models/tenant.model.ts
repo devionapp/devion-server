@@ -19,6 +19,25 @@ export class Tenant extends Entity {
   })
   name: string;
 
+  @property({
+    type: 'string',
+    required: false,
+    index: {
+      unique: true,
+    },
+  })
+  razaoSocial: string;
+
+  @property({
+    type: 'string',
+    required: false,
+    index: {
+      unique: true,
+    },
+  })
+  cnpj: string;
+
+
   @hasMany(() => Project)
   projects: Project[];
 

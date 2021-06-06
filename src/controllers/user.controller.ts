@@ -23,7 +23,7 @@ import {
   UserServiceBindings
 } from '../keys';
 import {User} from '../models';
-import {Credentials, UserRepository} from '../repositories';
+import {Credentials, UserRepository, UserSkillRepository} from '../repositories';
 import {MyUserService} from '../services/user-service';
 import {validateCredentials} from '../services/validators';
 import {BcryptHasher} from './../services/hash.password.bcrypt';
@@ -33,13 +33,15 @@ export class UserController {
   constructor(
     @repository(UserRepository)
     public userRepository: UserRepository,
+    @repository(UserSkillRepository)
+    public userSkillRepository: UserSkillRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
     @inject(UserServiceBindings.USER_SERVICE)
     public userService: MyUserService,
     @inject(TokenServiceBindings.TOKEN_SERVICE)
     public jwtService: JWTService,
-  ) {}
+  ) { }
 
   @post('/signup', {
     responses: {
@@ -148,7 +150,7 @@ export class UserController {
     @param.filter(User, {exclude: 'where'})
     filter?: FilterExcludingWhere<User>,
   ): Promise<User> {
-    return this.userRepository.findById(id, {
+    const user = await this.userRepository.findById(id, {
       fields: {password: false},
       include: [
         {relation: 'tenant'},
@@ -158,8 +160,15 @@ export class UserController {
             include: ['permissions'],
           },
         },
+        {
+          relation: 'skills',
+        },
       ],
     });
+
+    user.skills = await this.userSkillRepository.find({where: {userId: user.id}})
+
+    return user
   }
 
   @patch('/users/{id}')
@@ -178,7 +187,7 @@ export class UserController {
     })
     user: User,
   ): Promise<void> {
-    if(user.password){
+    if (user.password) {
       // Valida se o formato do email esta correto e se a senha tem pelo menos 8 caracteres
       validateCredentials(_.pick(user, ['email', 'password']));
 
@@ -200,13 +209,26 @@ export class UserController {
     const userAux: User = await this.userRepository.findById(user.id);
     if (!user.password) {
       user.password = userAux.password;
-    }else{
-        // Valida se o formato do email esta correto e se a senha tem pelo menos 8 caracteres
-        validateCredentials(_.pick(user, ['email', 'password']));
+    } else {
+      // Valida se o formato do email esta correto e se a senha tem pelo menos 8 caracteres
+      validateCredentials(_.pick(user, ['email', 'password']));
 
-        // Criptografa a senha
-        user.password = await this.hasher.hashPassword(user.password);
+      // Criptografa a senha
+      user.password = await this.hasher.hashPassword(user.password);
     }
+
+
+    if (user.skills?.length) {
+      await this.userSkillRepository.deleteAll({userId: id})
+
+      await Promise.all(user.skills.map(async s => {
+        const skill = {userId: id, skillId: s.skillId, level: s.level}
+        await this.userSkillRepository.create(skill)
+      }))
+    }
+
+    delete user.skills
+
     await this.userRepository.replaceById(id, user);
   }
 

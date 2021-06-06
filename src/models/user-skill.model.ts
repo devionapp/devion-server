@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Skill} from './skill.model';
+import {User} from './user.model';
 
 @model({
   settings: {
@@ -27,15 +29,16 @@ export class UserSkill extends Entity {
   })
   id?: number;
 
-  @property({
-    type: 'number',
-  })
-  userId?: number;
+  @belongsTo(() => User)
+  userId: number;
+
+  @belongsTo(() => Skill)
+  skillId: number;
 
   @property({
     type: 'number',
   })
-  skillId?: number;
+  level?: number;
 
   constructor(data?: Partial<UserSkill>) {
     super(data);

@@ -9,3 +9,5 @@ export * from './project-requirement.controller';
 export * from './tenant-project.controller';
 export * from './project.controller';
 export * from './skill.controller';
+export * from './user-skill-user.controller';
+export * from './user-skill-skill.controller';

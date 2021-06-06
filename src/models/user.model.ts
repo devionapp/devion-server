@@ -3,7 +3,7 @@ import {
   Entity,
   hasMany,
   model,
-  property,
+  property
 } from '@loopback/repository';
 import {Role} from './role.model';
 import {Skill} from './skill.model';
@@ -86,8 +86,13 @@ export class User extends Entity {
   @belongsTo(() => Role)
   roleId: number;
 
-  @hasMany(() => Skill, {through: {model: () => UserSkill}})
-  skills: Skill[];
+  @hasMany(() => Skill, {
+    through: {
+      model: () => UserSkill,
+    }
+  })
+  skills?: UserSkill[];
+
   // Indexer property to allow additional data
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [prop: string]: any;

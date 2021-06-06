@@ -14,7 +14,7 @@ export class MyUserService implements UserService<User, Credentials> {
     public userRepository: UserRepository,
     @inject(PasswordHasherBindings.PASSWORD_HASHER)
     public hasher: BcryptHasher,
-  ) {}
+  ) { }
 
   async verifyCredentials(credentials: Credentials): Promise<User> {
     const foundUser = await this.userRepository.findOne({

@@ -60,7 +60,17 @@ export class UserController {
     // Criptografa a senha
     userData.password = await this.hasher.hashPassword(userData.password);
 
+    const skills = _.cloneDeep(userData.skills)
+    delete userData.skills
+
     const user = await this.userRepository.create(userData);
+
+    if (skills?.length) {
+      await Promise.all(skills.map(async s => {
+        const skill = {userId: user.id, skillId: s.skillId, level: s.level}
+        await this.userSkillRepository.create(skill)
+      }))
+    }
 
     return user;
   }
@@ -217,10 +227,9 @@ export class UserController {
       user.password = await this.hasher.hashPassword(user.password);
     }
 
+    await this.userSkillRepository.deleteAll({userId: id})
 
     if (user.skills?.length) {
-      await this.userSkillRepository.deleteAll({userId: id})
-
       await Promise.all(user.skills.map(async s => {
         const skill = {userId: id, skillId: s.skillId, level: s.level}
         await this.userSkillRepository.create(skill)

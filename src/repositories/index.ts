@@ -7,3 +7,5 @@ export * from './permission.repository';
 export * from './role-permission.repository';
 export * from './project.repository';
 export * from './requirement.repository';
+export * from './flow.repository';
+export * from './flow-step.repository';

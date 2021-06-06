@@ -7,3 +7,5 @@ export * from './permission.model';
 export * from './role-permission.model';
 export * from './project.model';
 export * from './requirement.model';
+export * from './flow.model';
+export * from './flow-step.model';

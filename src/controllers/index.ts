@@ -11,3 +11,4 @@ export * from './project.controller';
 export * from './skill.controller';
 export * from './user-skill-user.controller';
 export * from './user-skill-skill.controller';
+export * from './requirement-project.controller';

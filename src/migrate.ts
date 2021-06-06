@@ -13,11 +13,13 @@ export async function migrate(args: string[]) {
       'Role',
       'Permission',
       'RolePermission',
-      'Project',
-      'Requirement',
       'User',
       'Skill',
       'UserSkill',
+      'Project',
+      'Flow',
+      'Step',
+      'Requirement',
     ],
   });
 

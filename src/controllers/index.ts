@@ -12,3 +12,6 @@ export * from './skill.controller';
 export * from './user-skill-user.controller';
 export * from './user-skill-skill.controller';
 export * from './requirement-project.controller';
+export * from './requirement-flow.controller';
+export * from './flow-step.controller';
+export * from './step-flow.controller';

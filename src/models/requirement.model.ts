@@ -1,14 +1,21 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Flow} from './flow.model';
 import {Project} from './project.model';
 
 @model({
   settings: {
     foreignKeys: {
       projectId: {
-        name: 'fk_projectId',
+        name: 'fk_requirement_projectId',
         entity: 'Project',
         entityKey: 'id',
         foreignKey: 'projectId',
+      },
+      flowId: {
+        name: 'fk_requirement_flowId',
+        entity: 'Flow',
+        entityKey: 'id',
+        foreignKey: 'flowId',
       },
     },
   },
@@ -20,6 +27,13 @@ export class Requirement extends Entity {
     generated: true,
   })
   id?: number;
+
+  @belongsTo(() => Project)
+  projectId: number;
+
+  @belongsTo(() => Flow)
+  flowId: number;
+
   @property({
     type: 'string',
     required: true,
@@ -30,9 +44,6 @@ export class Requirement extends Entity {
     type: 'string',
   })
   description?: string;
-
-  @belongsTo(() => Project)
-  projectId: number;
 
   constructor(data?: Partial<Requirement>) {
     super(data);

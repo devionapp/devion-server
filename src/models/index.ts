@@ -11,3 +11,4 @@ export * from './user-skill.model';
 export * from './user.model';
 
 export * from './application.model';
+export * from './project-application.model';

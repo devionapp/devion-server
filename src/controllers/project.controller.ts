@@ -4,18 +4,17 @@ import {
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
+  del, get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
 import {Project} from '../models';
 import {ProjectRepository} from '../repositories';
@@ -23,8 +22,8 @@ import {ProjectRepository} from '../repositories';
 export class ProjectController {
   constructor(
     @repository(ProjectRepository)
-    public projectRepository : ProjectRepository,
-  ) {}
+    public projectRepository: ProjectRepository,
+  ) { }
 
   @post('/projects')
   @response(200, {
@@ -32,18 +31,13 @@ export class ProjectController {
     content: {'application/json': {schema: getModelSchemaRef(Project)}},
   })
   async create(
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Project, {
-            title: 'NewProject',
-            
-          }),
-        },
-      },
-    })
+    @requestBody()
     project: Project,
   ): Promise<Project> {
+    if (project.applications) {
+      delete project.applications
+    }
+
     return this.projectRepository.create(project);
   }
 

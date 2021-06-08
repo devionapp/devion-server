@@ -17,6 +17,7 @@ export async function migrate(args: string[]) {
       'Skill',
       'UserSkill',
       'Project',
+      'Application',
       'Flow',
       'Step',
       'Requirement',

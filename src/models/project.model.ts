@@ -1,8 +1,10 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
 import {Requirement} from './requirement.model';
+import {Tenant} from './tenant.model';
 
 @model({
   settings: {
+    strict: "filter",
     foreignKeys: {
       tenantId: {
         name: 'fk_project_tenantId',
@@ -21,11 +23,13 @@ export class Project extends Entity {
   })
   id?: number;
 
+  @belongsTo(() => Tenant)
+  tenantId: number;
+
   @property({
     type: 'number',
-    required: true,
   })
-  createdBy: number;
+  createdBy?: number;
 
   @property({
     type: 'string',
@@ -34,39 +38,10 @@ export class Project extends Entity {
   name: string;
 
   @property({
-    type: 'number',
-  })
-  tenantId?: number;
-
-  @property({
     type: 'string',
+    required: true,
   })
   description: string;
-
-  @property({
-    type: 'string',
-  })
-  type: string;
-
-  @property({
-    type: 'string',
-  })
-  baseUrl: string;
-
-  @property({
-    type: 'string',
-  })
-  baseUrlDev: string;
-
-  @property({
-    type: 'string',
-  })
-  baseUrlQa: string;
-
-  @property({
-    type: 'string',
-  })
-  repository: string;
 
   @property({
     type: 'date',

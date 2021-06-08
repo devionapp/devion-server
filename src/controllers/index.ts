@@ -15,3 +15,4 @@ export * from './requirement-project.controller';
 export * from './requirement-flow.controller';
 export * from './flow-step.controller';
 export * from './step-flow.controller';
+export * from './project-tenant.controller';

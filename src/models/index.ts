@@ -10,3 +10,4 @@ export * from './tenant.model';
 export * from './user-skill.model';
 export * from './user.model';
 
+export * from './application.model';

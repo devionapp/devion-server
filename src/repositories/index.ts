@@ -10,3 +10,4 @@ export * from './tenant.repository';
 export * from './user-skill.repository';
 export * from './user.repository';
 
+export * from './application.repository';

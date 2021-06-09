@@ -78,7 +78,7 @@ export class Project extends Entity {
   requirements?: Requirement[];
 
   @hasMany(() => Application, {through: {model: () => ProjectApplication}})
-  applications?: Application[];
+  applications?: ProjectApplication[];
 
   constructor(data?: Partial<Project>) {
     super(data);

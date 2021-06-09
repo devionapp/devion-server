@@ -1,3 +1,5 @@
+import {AuthenticationBindings} from '@loopback/authentication';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
@@ -8,19 +10,26 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef,
-  param,
-  patch,
-  post,
+  getModelSchemaRef, param,
+
+
+  patch, post,
+
+
+
+
   put,
+
   requestBody,
   response
 } from '@loopback/rest';
-import {Project} from '../models';
-import {ProjectRepository} from '../repositories';
+import {Project, User} from '../models';
+import {ProjectRepository, UserRepository} from '../repositories';
 
 export class ProjectController {
   constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
     @repository(ProjectRepository)
     public projectRepository: ProjectRepository,
   ) { }
@@ -31,13 +40,21 @@ export class ProjectController {
     content: {'application/json': {schema: getModelSchemaRef(Project)}},
   })
   async create(
-    @requestBody()
-    project: Project,
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
+    @requestBody({
+      content: {
+        'application/json': {
+          schema: getModelSchemaRef(Project, {
+            title: 'NewProject',
+          }),
+        },
+      },
+    })
+    project: Omit<Project, 'applications'>,
   ): Promise<Project> {
-    if (project.applications) {
-      delete project.applications
-    }
-
+    // const {id} = await this.userRepository.findById(currentUser.id);
+    // project.createdBy = id
     return this.projectRepository.create(project);
   }
 

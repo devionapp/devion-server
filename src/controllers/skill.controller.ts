@@ -1,53 +1,63 @@
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
+  del, get,
   getModelSchemaRef,
+  param,
   patch,
+  post,
   put,
-  del,
   requestBody,
-  response,
+  response
 } from '@loopback/rest';
-import {Skill} from '../models';
-import {SkillRepository} from '../repositories';
+import {Skill, User} from '../models';
+import {SkillRepository, UserRepository} from '../repositories';
+
 
 export class SkillController {
   constructor(
     @repository(SkillRepository)
-    public skillRepository : SkillRepository,
-  ) {}
+    public skillRepository: SkillRepository,
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+  ) { }
 
   @post('/skills')
+  @authenticate('jwt')
   @response(200, {
     description: 'Skill model instance',
     content: {'application/json': {schema: getModelSchemaRef(Skill)}},
   })
   async create(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @requestBody({
       content: {
         'application/json': {
           schema: getModelSchemaRef(Skill, {
             title: 'NewSkill',
-            
+
           }),
         },
       },
     })
     skill: Skill,
   ): Promise<Skill> {
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+    skill.tenantId = tenantId
     return this.skillRepository.create(skill);
   }
 
   @get('/skills/count')
+  @authenticate('jwt')
   @response(200, {
     description: 'Skill model count',
     content: {'application/json': {schema: CountSchema}},
@@ -59,6 +69,7 @@ export class SkillController {
   }
 
   @get('/skills')
+  @authenticate('jwt')
   @response(200, {
     description: 'Array of Skill model instances',
     content: {
@@ -71,12 +82,21 @@ export class SkillController {
     },
   })
   async find(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @param.filter(Skill) filter?: Filter<Skill>,
   ): Promise<Skill[]> {
-    return this.skillRepository.find(filter);
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+
+    return this.skillRepository.find({
+      where: {
+        tenantId: tenantId,
+      },
+    });
   }
 
   @patch('/skills')
+  @authenticate('jwt')
   @response(200, {
     description: 'Skill PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -96,6 +116,7 @@ export class SkillController {
   }
 
   @get('/skills/{id}')
+  @authenticate('jwt')
   @response(200, {
     description: 'Skill model instance',
     content: {
@@ -112,6 +133,7 @@ export class SkillController {
   }
 
   @patch('/skills/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Skill PATCH success',
   })
@@ -130,6 +152,7 @@ export class SkillController {
   }
 
   @put('/skills/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Skill PUT success',
   })
@@ -141,6 +164,7 @@ export class SkillController {
   }
 
   @del('/skills/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Skill DELETE success',
   })

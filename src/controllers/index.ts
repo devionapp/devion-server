@@ -17,3 +17,5 @@ export * from './flow-step.controller';
 export * from './step-flow.controller';
 export * from './project-tenant.controller';
 export * from './project-application.controller';
+export * from './application.controller';
+export * from './skill-tenant.controller';

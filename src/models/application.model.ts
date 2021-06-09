@@ -12,6 +12,7 @@ export class Application extends Entity {
   @property({
     type: 'string',
     required: true,
+    unique: true,
   })
   name: string;
 
@@ -21,9 +22,14 @@ export class Application extends Entity {
   description?: string;
 
   @property({
+    type: 'number',
+  })
+  type?: number;
+
+  @property({
     type: 'string',
   })
-  type?: string;
+  repository?: string;
 
   @property({
     type: 'string',
@@ -34,6 +40,8 @@ export class Application extends Entity {
     type: 'string',
   })
   language?: string;
+
+
 
   // Define well-known properties here
 

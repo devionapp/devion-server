@@ -18,6 +18,7 @@ export class ProjectApp extends Entity {
     type: 'number',
   })
   appId?: number;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data

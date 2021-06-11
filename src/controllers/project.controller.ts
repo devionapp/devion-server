@@ -10,22 +10,17 @@ import {
 } from '@loopback/repository';
 import {
   del, get,
-  getModelSchemaRef, param,
-
-
-  patch, post,
-
-
-
-
+  getModelSchemaRef,
+  param,
+  patch,
+  post,
   put,
-
   requestBody,
   response
 } from '@loopback/rest';
 import * as _ from 'lodash';
 import {Project, User} from '../models';
-import {ProjectRepository, UserRepository} from '../repositories';
+import {ProjectAppRepository, ProjectRepository, UserRepository} from '../repositories';
 
 export class ProjectController {
   constructor(
@@ -33,6 +28,8 @@ export class ProjectController {
     public userRepository: UserRepository,
     @repository(ProjectRepository)
     public projectRepository: ProjectRepository,
+    @repository(ProjectAppRepository)
+    public projectAppRepository: ProjectAppRepository,
   ) { }
 
   @post('/projects')
@@ -57,15 +54,16 @@ export class ProjectController {
     const project = await this.projectRepository.create(projectData);
 
     if (apps?.length) {
-      apps.forEach(app => {
-        this.projectRepository.apps(project.id).link(app)
-      })
+      await Promise.all(apps.map(async app => {
+        await this.projectRepository.apps(project.id).link(app.id)
+      }))
     }
 
     return project
   }
 
   @get('/projects/count')
+  @authenticate('jwt')
   @response(200, {
     description: 'Project model count',
     content: {'application/json': {schema: CountSchema}},
@@ -77,6 +75,7 @@ export class ProjectController {
   }
 
   @get('/projects')
+  @authenticate('jwt')
   @response(200, {
     description: 'Array of Project model instances',
     content: {
@@ -95,6 +94,7 @@ export class ProjectController {
   }
 
   @patch('/projects')
+  @authenticate('jwt')
   @response(200, {
     description: 'Project PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -114,6 +114,7 @@ export class ProjectController {
   }
 
   @get('/projects/{id}')
+  @authenticate('jwt')
   @response(200, {
     description: 'Project model instance',
     content: {
@@ -126,10 +127,15 @@ export class ProjectController {
     @param.path.number('id') id: number,
     @param.filter(Project, {exclude: 'where'}) filter?: FilterExcludingWhere<Project>
   ): Promise<Project> {
-    return this.projectRepository.findById(id, filter);
+    return this.projectRepository.findById(id, {
+      include: [
+        {relation: 'apps'},
+      ],
+    });
   }
 
   @patch('/projects/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Project PATCH success',
   })
@@ -148,6 +154,7 @@ export class ProjectController {
   }
 
   @put('/projects/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Project PUT success',
   })
@@ -156,12 +163,12 @@ export class ProjectController {
     @requestBody() project: Project,
   ): Promise<void> {
 
-    this.projectRepository.apps(project.id).delete()
+    await this.projectAppRepository.deleteAll({projectId: id})
 
     if (project.apps?.length) {
-      project.apps.forEach(app => {
-        this.projectRepository.apps(project.id).link(app)
-      })
+      await Promise.all(project.apps.map(async app => {
+        await this.projectRepository.apps(project.id).link(app.id)
+      }))
     }
 
     delete project.apps
@@ -170,6 +177,7 @@ export class ProjectController {
   }
 
   @del('/projects/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Project DELETE success',
   })

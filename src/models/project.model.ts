@@ -1,11 +1,12 @@
 import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
-import {Application} from './application.model';
-import {ProjectApplication} from './project-application.model';
+import {App} from './app.model';
+import {ProjectApp} from './project-app.model';
 import {Requirement} from './requirement.model';
 import {Tenant} from './tenant.model';
 
 @model({
   settings: {
+    strict: false,
     foreignKeys: {
       tenantId: {
         name: 'fk_project_tenantId',
@@ -77,8 +78,8 @@ export class Project extends Entity {
   @hasMany(() => Requirement)
   requirements?: Requirement[];
 
-  @hasMany(() => Application, {through: {model: () => ProjectApplication}})
-  applications?: ProjectApplication[];
+  @hasMany(() => App, {through: {model: () => ProjectApp}})
+  apps?: number[];
 
   constructor(data?: Partial<Project>) {
     super(data);

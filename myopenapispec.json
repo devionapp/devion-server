@@ -1,0 +1,5223 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "devion-server",
+    "version": "0.0.1",
+    "description": "Servidor do projeto Devion",
+    "contact": {
+      "name": "Mikael Gallucci",
+      "email": "mikagallucci@gmail.com"
+    }
+  },
+  "paths": {
+    "/apps/count": {
+      "get": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "count",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "App model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "App.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<App>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "AppController.count"
+      }
+    },
+    "/apps/{id}": {
+      "put": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "App PUT success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/App"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "AppController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "App PATCH success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "AppController.updateById"
+      },
+      "get": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "findById",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "App model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AppWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/App.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "AppController.findById"
+      },
+      "delete": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "App DELETE success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "AppController.deleteById"
+      }
+    },
+    "/apps": {
+      "post": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "create",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "App model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/App"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewApp"
+              }
+            }
+          }
+        },
+        "operationId": "AppController.create"
+      },
+      "patch": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "App PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "App.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<App>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppPartial"
+              }
+            }
+          }
+        },
+        "operationId": "AppController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "AppController",
+        "x-operation-name": "find",
+        "tags": [
+          "AppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of App model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AppWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/App.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "AppController.find"
+      }
+    },
+    "/flows/{id}/steps": {
+      "post": {
+        "x-controller-name": "FlowStepController",
+        "x-operation-name": "create",
+        "tags": [
+          "FlowStepController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Flow model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Step"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewStepInFlow"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FlowStepController.create"
+      },
+      "patch": {
+        "x-controller-name": "FlowStepController",
+        "x-operation-name": "patch",
+        "tags": [
+          "FlowStepController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Flow.Step PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Step.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Step>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StepPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "FlowStepController.patch"
+      },
+      "get": {
+        "x-controller-name": "FlowStepController",
+        "x-operation-name": "find",
+        "tags": [
+          "FlowStepController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Flow has many Step",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Step"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FlowStepController.find"
+      },
+      "delete": {
+        "x-controller-name": "FlowStepController",
+        "x-operation-name": "delete",
+        "tags": [
+          "FlowStepController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Flow.Step DELETE success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Step.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Step>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "FlowStepController.delete"
+      }
+    },
+    "/login": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "login",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.login"
+      }
+    },
+    "/ping": {
+      "get": {
+        "x-controller-name": "PingController",
+        "x-operation-name": "ping",
+        "tags": [
+          "PingController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Ping Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PingResponse"
+                }
+              }
+            }
+          }
+        },
+        "operationId": "PingController.ping"
+      }
+    },
+    "/projects/count": {
+      "get": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "count",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Project.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Project>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectController.count"
+      }
+    },
+    "/projects/{id}/apps": {
+      "post": {
+        "x-controller-name": "ProjectAppController",
+        "x-operation-name": "create",
+        "tags": [
+          "ProjectAppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "create a App model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/App"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewAppInProject"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProjectAppController.create"
+      },
+      "patch": {
+        "x-controller-name": "ProjectAppController",
+        "x-operation-name": "patch",
+        "tags": [
+          "ProjectAppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project.App PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "App.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<App>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AppPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProjectAppController.patch"
+      },
+      "get": {
+        "x-controller-name": "ProjectAppController",
+        "x-operation-name": "find",
+        "tags": [
+          "ProjectAppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Project has many App through ProjectApp",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/App"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectAppController.find"
+      },
+      "delete": {
+        "x-controller-name": "ProjectAppController",
+        "x-operation-name": "delete",
+        "tags": [
+          "ProjectAppController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project.App DELETE success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "App.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<App>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectAppController.delete"
+      }
+    },
+    "/projects/{id}/requirements": {
+      "post": {
+        "x-controller-name": "ProjectRequirementController",
+        "x-operation-name": "create",
+        "tags": [
+          "ProjectRequirementController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Requirement"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewRequirementInProject"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProjectRequirementController.create"
+      },
+      "patch": {
+        "x-controller-name": "ProjectRequirementController",
+        "x-operation-name": "patch",
+        "tags": [
+          "ProjectRequirementController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project.Requirement PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Requirement.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Requirement>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequirementPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProjectRequirementController.patch"
+      },
+      "get": {
+        "x-controller-name": "ProjectRequirementController",
+        "x-operation-name": "find",
+        "tags": [
+          "ProjectRequirementController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Project has many Requirement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Requirement"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectRequirementController.find"
+      },
+      "delete": {
+        "x-controller-name": "ProjectRequirementController",
+        "x-operation-name": "delete",
+        "tags": [
+          "ProjectRequirementController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project.Requirement DELETE success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Requirement.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Requirement>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectRequirementController.delete"
+      }
+    },
+    "/projects/{id}/tenant": {
+      "get": {
+        "x-controller-name": "ProjectTenantController",
+        "x-operation-name": "getTenant",
+        "tags": [
+          "ProjectTenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant belonging to Project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tenant"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "ProjectTenantController.getTenant"
+      }
+    },
+    "/projects/{id}": {
+      "put": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Project PUT success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProjectController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Project PATCH success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "ProjectController.updateById"
+      },
+      "get": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "findById",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProjectWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectController.findById"
+      },
+      "delete": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Project DELETE success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "ProjectController.deleteById"
+      }
+    },
+    "/projects": {
+      "post": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "create",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Project model instance"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Project"
+              }
+            }
+          }
+        },
+        "operationId": "ProjectController.create"
+      },
+      "patch": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Project.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Project>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectPartial"
+              }
+            }
+          }
+        },
+        "operationId": "ProjectController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "ProjectController",
+        "x-operation-name": "find",
+        "tags": [
+          "ProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Project model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProjectWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "ProjectController.find"
+      }
+    },
+    "/requirements/{id}/flow": {
+      "get": {
+        "x-controller-name": "RequirementFlowController",
+        "x-operation-name": "getFlow",
+        "tags": [
+          "RequirementFlowController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Flow belonging to Requirement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flow"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "RequirementFlowController.getFlow"
+      }
+    },
+    "/requirements/{id}/project": {
+      "get": {
+        "x-controller-name": "RequirementProjectController",
+        "x-operation-name": "getProject",
+        "tags": [
+          "RequirementProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Project belonging to Requirement",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "RequirementProjectController.getProject"
+      }
+    },
+    "/roles/{id}/permissions": {
+      "post": {
+        "x-controller-name": "RolePermissionController",
+        "x-operation-name": "create",
+        "tags": [
+          "RolePermissionController"
+        ],
+        "responses": {
+          "200": {
+            "description": "create a Permission model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Permission"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewPermissionInRole"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "RolePermissionController.create"
+      },
+      "patch": {
+        "x-controller-name": "RolePermissionController",
+        "x-operation-name": "patch",
+        "tags": [
+          "RolePermissionController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Role.Permission PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Permission.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Permission>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PermissionPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "RolePermissionController.patch"
+      },
+      "get": {
+        "x-controller-name": "RolePermissionController",
+        "x-operation-name": "find",
+        "tags": [
+          "RolePermissionController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Role has many Permission through RolePermission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Permission"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "RolePermissionController.find"
+      },
+      "delete": {
+        "x-controller-name": "RolePermissionController",
+        "x-operation-name": "delete",
+        "tags": [
+          "RolePermissionController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Role.Permission DELETE success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Permission.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Permission>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "RolePermissionController.delete"
+      }
+    },
+    "/signup": {
+      "post": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "singUp",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Sign Up User",
+            "content": {
+              "schema": {
+                "$ref": "#/definitions/User",
+                "definitions": {
+                  "User": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        },
+        "operationId": "UserController.singUp"
+      }
+    },
+    "/skills/count": {
+      "get": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "count",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Skill model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Skill.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Skill>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "SkillController.count"
+      }
+    },
+    "/skills/{id}/tenant": {
+      "get": {
+        "x-controller-name": "SkillTenantController",
+        "x-operation-name": "getTenant",
+        "tags": [
+          "SkillTenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant belonging to Skill",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tenant"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "SkillTenantController.getTenant"
+      }
+    },
+    "/skills/{id}": {
+      "put": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Skill PUT success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Skill"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "SkillController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Skill PATCH success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkillPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "SkillController.updateById"
+      },
+      "get": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "findById",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Skill model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SkillWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Skill.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "SkillController.findById"
+      },
+      "delete": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Skill DELETE success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "SkillController.deleteById"
+      }
+    },
+    "/skills": {
+      "post": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "create",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Skill model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Skill"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSkill"
+              }
+            }
+          }
+        },
+        "operationId": "SkillController.create"
+      },
+      "patch": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Skill PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Skill.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Skill>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkillPartial"
+              }
+            }
+          }
+        },
+        "operationId": "SkillController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "SkillController",
+        "x-operation-name": "find",
+        "tags": [
+          "SkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Skill model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/SkillWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Skill.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "SkillController.find"
+      }
+    },
+    "/steps/{id}/flow": {
+      "get": {
+        "x-controller-name": "StepFlowController",
+        "x-operation-name": "getFlow",
+        "tags": [
+          "StepFlowController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Flow belonging to Step",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Flow"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "StepFlowController.getFlow"
+      }
+    },
+    "/tenants/count": {
+      "get": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "count",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant model count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Tenant.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Tenant>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TenantController.count"
+      }
+    },
+    "/tenants/{id}/projects": {
+      "post": {
+        "x-controller-name": "TenantProjectController",
+        "x-operation-name": "create",
+        "tags": [
+          "TenantProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Project"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewProjectInTenant"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "TenantProjectController.create"
+      },
+      "patch": {
+        "x-controller-name": "TenantProjectController",
+        "x-operation-name": "patch",
+        "tags": [
+          "TenantProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant.Project PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Project.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Project>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProjectPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "TenantProjectController.patch"
+      },
+      "get": {
+        "x-controller-name": "TenantProjectController",
+        "x-operation-name": "find",
+        "tags": [
+          "TenantProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Tenant has many Project",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Project"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TenantProjectController.find"
+      },
+      "delete": {
+        "x-controller-name": "TenantProjectController",
+        "x-operation-name": "delete",
+        "tags": [
+          "TenantProjectController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant.Project DELETE success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Project.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Project>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TenantProjectController.delete"
+      }
+    },
+    "/tenants/{id}": {
+      "put": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Tenant PUT success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Tenant"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "TenantController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Tenant PATCH success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "TenantController.updateById"
+      },
+      "get": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "findById",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TenantWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TenantController.findById"
+      },
+      "delete": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "Tenant DELETE success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "TenantController.deleteById"
+      }
+    },
+    "/tenants": {
+      "post": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "create",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewTenant"
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.create"
+      },
+      "patch": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "updateAll",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Tenant.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Tenant>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TenantPartial"
+              }
+            }
+          }
+        },
+        "operationId": "TenantController.updateAll"
+      },
+      "get": {
+        "x-controller-name": "TenantController",
+        "x-operation-name": "find",
+        "tags": [
+          "TenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of Tenant model instances",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TenantWithRelations"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Tenant.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "TenantController.find"
+      }
+    },
+    "/user-skills/{id}/skill": {
+      "get": {
+        "x-controller-name": "UserSkillSkillController",
+        "x-operation-name": "getSkill",
+        "tags": [
+          "UserSkillSkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Skill belonging to UserSkill",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Skill"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserSkillSkillController.getSkill"
+      }
+    },
+    "/user-skills/{id}/user": {
+      "get": {
+        "x-controller-name": "UserSkillUserController",
+        "x-operation-name": "getUser",
+        "tags": [
+          "UserSkillUserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User belonging to UserSkill",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserSkillUserController.getUser"
+      }
+    },
+    "/users/me": {
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "me",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return value of UserController.me"
+          }
+        },
+        "operationId": "UserController.me"
+      }
+    },
+    "/users/{id}/role": {
+      "get": {
+        "x-controller-name": "UserRoleController",
+        "x-operation-name": "getRole",
+        "tags": [
+          "UserRoleController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Role belonging to User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Role"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserRoleController.getRole"
+      }
+    },
+    "/users/{id}/skills": {
+      "post": {
+        "x-controller-name": "UserSkillController",
+        "x-operation-name": "create",
+        "tags": [
+          "UserSkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "create a Skill model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Skill"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewSkillInUser"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "UserSkillController.create"
+      },
+      "patch": {
+        "x-controller-name": "UserSkillController",
+        "x-operation-name": "patch",
+        "tags": [
+          "UserSkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User.Skill PATCH success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Skill.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Skill>"
+                }
+              }
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SkillPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "UserSkillController.patch"
+      },
+      "get": {
+        "x-controller-name": "UserSkillController",
+        "x-operation-name": "find",
+        "tags": [
+          "UserSkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Array of User has many Skill through UserSkill",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Skill"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserSkillController.find"
+      },
+      "delete": {
+        "x-controller-name": "UserSkillController",
+        "x-operation-name": "delete",
+        "tags": [
+          "UserSkillController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User.Skill DELETE success count",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loopback.Count"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "where",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "title": "Skill.WhereFilter",
+                  "additionalProperties": true,
+                  "x-typescript-type": "@loopback/repository#Where<Skill>"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserSkillController.delete"
+      }
+    },
+    "/users/{id}/tenant": {
+      "get": {
+        "x-controller-name": "UserTenantController",
+        "x-operation-name": "getTenant",
+        "tags": [
+          "UserTenantController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Tenant belonging to User",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Tenant"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserTenantController.getTenant"
+      }
+    },
+    "/users/{id}": {
+      "put": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "replaceById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "User PUT success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "UserController.replaceById"
+      },
+      "patch": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "updateById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "User PATCH success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserPartial"
+              }
+            }
+          },
+          "x-parameter-index": 1
+        },
+        "operationId": "UserController.updateById"
+      },
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "findById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "User model instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserWithRelations"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User.Filter"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserController.findById"
+      },
+      "delete": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "deleteById",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "description": "User DELETE success"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "schema": {
+              "type": "number"
+            },
+            "required": true
+          }
+        ],
+        "operationId": "UserController.deleteById"
+      }
+    },
+    "/users": {
+      "get": {
+        "x-controller-name": "UserController",
+        "x-operation-name": "find",
+        "tags": [
+          "UserController"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return value of UserController.find"
+          }
+        },
+        "parameters": [
+          {
+            "name": "filter",
+            "in": "query",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User.Filter1"
+                }
+              }
+            }
+          }
+        ],
+        "operationId": "UserController.find"
+      }
+    }
+  },
+  "servers": [
+    {
+      "url": "/"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "App": {
+        "title": "App",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "designPattern": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true
+      },
+      "NewApp": {
+        "title": "NewApp",
+        "type": "object",
+        "description": "(tsType: Omit<App, 'id'>, schemaOptions: { title: 'NewApp', exclude: [ 'id' ] })",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "designPattern": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "Omit<App, 'id'>"
+      },
+      "AppWithRelations": {
+        "title": "AppWithRelations",
+        "type": "object",
+        "description": "(tsType: AppWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "designPattern": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "AppWithRelations"
+      },
+      "AppPartial": {
+        "title": "AppPartial",
+        "type": "object",
+        "description": "(tsType: Partial<App>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "designPattern": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": true,
+        "x-typescript-type": "Partial<App>"
+      },
+      "Step": {
+        "title": "Step",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "description",
+          "order"
+        ],
+        "additionalProperties": true
+      },
+      "NewStepInFlow": {
+        "title": "NewStepInFlow",
+        "type": "object",
+        "description": "(tsType: @loopback/repository-json-schema#Optional<Omit<Step, 'id'>, 'flowId'>, schemaOptions: { title: 'NewStepInFlow', exclude: [ 'id' ], optional: [ 'flowId' ] })",
+        "properties": {
+          "flowId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "description",
+          "order"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "@loopback/repository-json-schema#Optional<Omit<Step, 'id'>, 'flowId'>"
+      },
+      "StepPartial": {
+        "title": "StepPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Step>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": true,
+        "x-typescript-type": "Partial<Step>"
+      },
+      "NewAppInProject": {
+        "title": "NewAppInProject",
+        "type": "object",
+        "description": "(tsType: Omit<App, 'id'>, schemaOptions: { title: 'NewAppInProject', exclude: [ 'id' ] })",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "type": {
+            "type": "number"
+          },
+          "repository": {
+            "type": "string"
+          },
+          "designPattern": {
+            "type": "string"
+          },
+          "language": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "Omit<App, 'id'>"
+      },
+      "Requirement": {
+        "title": "Requirement",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "projectId": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "NewRequirementInProject": {
+        "title": "NewRequirementInProject",
+        "type": "object",
+        "description": "(tsType: @loopback/repository-json-schema#Optional<Omit<Requirement, 'id'>, 'projectId'>, schemaOptions: { title: 'NewRequirementInProject', exclude: [ 'id' ], optional: [ 'projectId' ] })",
+        "properties": {
+          "projectId": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository-json-schema#Optional<Omit<Requirement, 'id'>, 'projectId'>"
+      },
+      "RequirementPartial": {
+        "title": "RequirementPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Requirement>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "projectId": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<Requirement>"
+      },
+      "Tenant": {
+        "title": "Tenant",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "razaoSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "User": {
+        "title": "User",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "password": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "roleId": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email"
+        ],
+        "additionalProperties": true
+      },
+      "Project": {
+        "title": "Project",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "createdBy": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "forecastDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "TenantWithRelations": {
+        "title": "TenantWithRelations",
+        "type": "object",
+        "description": "(tsType: TenantWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "razaoSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          },
+          "projects": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ProjectWithRelations"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "TenantWithRelations"
+      },
+      "StepWithRelations": {
+        "title": "StepWithRelations",
+        "type": "object",
+        "description": "(tsType: StepWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "order": {
+            "type": "number"
+          },
+          "flow": {
+            "$ref": "#/components/schemas/FlowWithRelations"
+          }
+        },
+        "required": [
+          "description",
+          "order"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "StepWithRelations"
+      },
+      "FlowWithRelations": {
+        "title": "FlowWithRelations",
+        "type": "object",
+        "description": "(tsType: FlowWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "steps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/StepWithRelations"
+            }
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "FlowWithRelations"
+      },
+      "RequirementWithRelations": {
+        "title": "RequirementWithRelations",
+        "type": "object",
+        "description": "(tsType: RequirementWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "projectId": {
+            "type": "number"
+          },
+          "flowId": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "project": {
+            "$ref": "#/components/schemas/ProjectWithRelations"
+          },
+          "flow": {
+            "$ref": "#/components/schemas/FlowWithRelations"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "RequirementWithRelations"
+      },
+      "ProjectWithRelations": {
+        "title": "ProjectWithRelations",
+        "type": "object",
+        "description": "(tsType: ProjectWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "createdBy": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "forecastDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/TenantWithRelations"
+          },
+          "requirements": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/RequirementWithRelations"
+            }
+          },
+          "apps": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AppWithRelations"
+            }
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "ProjectWithRelations"
+      },
+      "ProjectPartial": {
+        "title": "ProjectPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Project>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "createdBy": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "forecastDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<Project>"
+      },
+      "Flow": {
+        "title": "Flow",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": true
+      },
+      "Permission": {
+        "title": "Permission",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false
+      },
+      "NewPermissionInRole": {
+        "title": "NewPermissionInRole",
+        "type": "object",
+        "description": "(tsType: Omit<Permission, 'id'>, schemaOptions: { title: 'NewPermissionInRole', exclude: [ 'id' ] })",
+        "properties": {
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<Permission, 'id'>"
+      },
+      "PermissionPartial": {
+        "title": "PermissionPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Permission>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<Permission>"
+      },
+      "Skill": {
+        "title": "Skill",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": false
+      },
+      "NewSkill": {
+        "title": "NewSkill",
+        "type": "object",
+        "description": "(tsType: Skill, schemaOptions: { title: 'NewSkill' })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Skill"
+      },
+      "SkillWithRelations": {
+        "title": "SkillWithRelations",
+        "type": "object",
+        "description": "(tsType: SkillWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/TenantWithRelations"
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "SkillWithRelations"
+      },
+      "SkillPartial": {
+        "title": "SkillPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Skill>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<Skill>"
+      },
+      "NewProjectInTenant": {
+        "title": "NewProjectInTenant",
+        "type": "object",
+        "description": "(tsType: @loopback/repository-json-schema#Optional<Omit<Project, 'id'>, 'tenantId'>, schemaOptions: { title: 'NewProjectInTenant', exclude: [ 'id' ], optional: [ 'tenantId' ] })",
+        "properties": {
+          "tenantId": {
+            "type": "number"
+          },
+          "createdBy": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "startDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "finishDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "forecastDate": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "createdOn": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "required": [
+          "name",
+          "description"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository-json-schema#Optional<Omit<Project, 'id'>, 'tenantId'>"
+      },
+      "NewTenant": {
+        "title": "NewTenant",
+        "type": "object",
+        "description": "(tsType: Omit<Tenant, 'id'>, schemaOptions: { title: 'NewTenant', exclude: [ 'id' ] })",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "razaoSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<Tenant, 'id'>"
+      },
+      "TenantPartial": {
+        "title": "TenantPartial",
+        "type": "object",
+        "description": "(tsType: Partial<Tenant>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "razaoSocial": {
+            "type": "string"
+          },
+          "cnpj": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "Partial<Tenant>"
+      },
+      "Role": {
+        "title": "Role",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true
+      },
+      "NewSkillInUser": {
+        "title": "NewSkillInUser",
+        "type": "object",
+        "description": "(tsType: Omit<Skill, 'id'>, schemaOptions: { title: 'NewSkillInUser', exclude: [ 'id' ] })",
+        "properties": {
+          "tenantId": {
+            "type": "number"
+          },
+          "description": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "description"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "Omit<Skill, 'id'>"
+      },
+      "PermissionWithRelations": {
+        "title": "PermissionWithRelations",
+        "type": "object",
+        "description": "(tsType: PermissionWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "value"
+        ],
+        "additionalProperties": false,
+        "x-typescript-type": "PermissionWithRelations"
+      },
+      "RoleWithRelations": {
+        "title": "RoleWithRelations",
+        "type": "object",
+        "description": "(tsType: RoleWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "name": {
+            "type": "string"
+          },
+          "permissions": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/PermissionWithRelations"
+            }
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "RoleWithRelations"
+      },
+      "UserWithRelations": {
+        "title": "UserWithRelations",
+        "type": "object",
+        "description": "(tsType: UserWithRelations, schemaOptions: { includeRelations: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "password": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "roleId": {
+            "type": "number"
+          },
+          "tenant": {
+            "$ref": "#/components/schemas/TenantWithRelations"
+          },
+          "role": {
+            "$ref": "#/components/schemas/RoleWithRelations"
+          },
+          "skills": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/SkillWithRelations"
+            }
+          }
+        },
+        "required": [
+          "firstName",
+          "lastName",
+          "email"
+        ],
+        "additionalProperties": true,
+        "x-typescript-type": "UserWithRelations"
+      },
+      "UserPartial": {
+        "title": "UserPartial",
+        "type": "object",
+        "description": "(tsType: Partial<User>, schemaOptions: { partial: true })",
+        "properties": {
+          "id": {
+            "type": "number"
+          },
+          "firstName": {
+            "type": "string"
+          },
+          "lastName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "birthday": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "password": {
+            "type": "string"
+          },
+          "created": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "modified": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "tenantId": {
+            "type": "number"
+          },
+          "roleId": {
+            "type": "number"
+          }
+        },
+        "additionalProperties": true,
+        "x-typescript-type": "Partial<User>"
+      },
+      "loopback.Count": {
+        "type": "object",
+        "title": "loopback.Count",
+        "x-typescript-type": "@loopback/repository#Count",
+        "properties": {
+          "count": {
+            "type": "number"
+          }
+        }
+      },
+      "App.Filter": {
+        "type": "object",
+        "title": "App.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "boolean"
+                  },
+                  "repository": {
+                    "type": "boolean"
+                  },
+                  "designPattern": {
+                    "type": "boolean"
+                  },
+                  "language": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "App.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<App>"
+      },
+      "App.Filter1": {
+        "type": "object",
+        "title": "App.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "App.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  },
+                  "type": {
+                    "type": "boolean"
+                  },
+                  "repository": {
+                    "type": "boolean"
+                  },
+                  "designPattern": {
+                    "type": "boolean"
+                  },
+                  "language": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "App.Fields"
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<App>"
+      },
+      "PingResponse": {
+        "type": "object",
+        "title": "PingResponse",
+        "properties": {
+          "greeting": {
+            "type": "string"
+          },
+          "date": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string"
+          },
+          "headers": {
+            "type": "object",
+            "properties": {
+              "Content-Type": {
+                "type": "string"
+              }
+            },
+            "additionalProperties": true
+          }
+        }
+      },
+      "Project.ScopeFilter": {
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ]
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false,
+        "title": "Project.ScopeFilter"
+      },
+      "Project.IncludeFilter.Items": {
+        "title": "Project.IncludeFilter.Items",
+        "type": "object",
+        "properties": {
+          "relation": {
+            "type": "string"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/Project.ScopeFilter"
+          }
+        }
+      },
+      "Project.Filter": {
+        "type": "object",
+        "title": "Project.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "tenantId": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  },
+                  "startDate": {
+                    "type": "boolean"
+                  },
+                  "finishDate": {
+                    "type": "boolean"
+                  },
+                  "forecastDate": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modified": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "tenantId",
+                    "createdBy",
+                    "name",
+                    "description",
+                    "startDate",
+                    "finishDate",
+                    "forecastDate",
+                    "createdOn",
+                    "modified"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Project.Fields"
+          },
+          "include": {
+            "title": "Project.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Project.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Project>"
+      },
+      "Project.Filter1": {
+        "type": "object",
+        "title": "Project.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "Project.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "tenantId": {
+                    "type": "boolean"
+                  },
+                  "createdBy": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  },
+                  "startDate": {
+                    "type": "boolean"
+                  },
+                  "finishDate": {
+                    "type": "boolean"
+                  },
+                  "forecastDate": {
+                    "type": "boolean"
+                  },
+                  "createdOn": {
+                    "type": "boolean"
+                  },
+                  "modified": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "tenantId",
+                    "createdBy",
+                    "name",
+                    "description",
+                    "startDate",
+                    "finishDate",
+                    "forecastDate",
+                    "createdOn",
+                    "modified"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Project.Fields"
+          },
+          "include": {
+            "title": "Project.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Project.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Project>"
+      },
+      "Skill.ScopeFilter": {
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ]
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false,
+        "title": "Skill.ScopeFilter"
+      },
+      "Skill.IncludeFilter.Items": {
+        "title": "Skill.IncludeFilter.Items",
+        "type": "object",
+        "properties": {
+          "relation": {
+            "type": "string"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/Skill.ScopeFilter"
+          }
+        }
+      },
+      "Skill.Filter": {
+        "type": "object",
+        "title": "Skill.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "tenantId": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "tenantId",
+                    "description"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Skill.Fields"
+          },
+          "include": {
+            "title": "Skill.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Skill.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Skill>"
+      },
+      "Skill.Filter1": {
+        "type": "object",
+        "title": "Skill.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "Skill.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "tenantId": {
+                    "type": "boolean"
+                  },
+                  "description": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "tenantId",
+                    "description"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Skill.Fields"
+          },
+          "include": {
+            "title": "Skill.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Skill.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Skill>"
+      },
+      "Tenant.ScopeFilter": {
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ]
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false,
+        "title": "Tenant.ScopeFilter"
+      },
+      "Tenant.IncludeFilter.Items": {
+        "title": "Tenant.IncludeFilter.Items",
+        "type": "object",
+        "properties": {
+          "relation": {
+            "type": "string"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/Tenant.ScopeFilter"
+          }
+        }
+      },
+      "Tenant.Filter": {
+        "type": "object",
+        "title": "Tenant.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "razaoSocial": {
+                    "type": "boolean"
+                  },
+                  "cnpj": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "name",
+                    "razaoSocial",
+                    "cnpj"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Tenant.Fields"
+          },
+          "include": {
+            "title": "Tenant.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Tenant.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Tenant>"
+      },
+      "Tenant.Filter1": {
+        "type": "object",
+        "title": "Tenant.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "Tenant.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "name": {
+                    "type": "boolean"
+                  },
+                  "razaoSocial": {
+                    "type": "boolean"
+                  },
+                  "cnpj": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": false
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "enum": [
+                    "id",
+                    "name",
+                    "razaoSocial",
+                    "cnpj"
+                  ],
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "Tenant.Fields"
+          },
+          "include": {
+            "title": "Tenant.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/Tenant.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<Tenant>"
+      },
+      "User.ScopeFilter": {
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {},
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "uniqueItems": true
+              }
+            ]
+          },
+          "include": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {},
+              "additionalProperties": true
+            }
+          }
+        },
+        "additionalProperties": false,
+        "title": "User.ScopeFilter"
+      },
+      "User.IncludeFilter.Items": {
+        "title": "User.IncludeFilter.Items",
+        "type": "object",
+        "properties": {
+          "relation": {
+            "type": "string"
+          },
+          "scope": {
+            "$ref": "#/components/schemas/User.ScopeFilter"
+          }
+        }
+      },
+      "User.Filter": {
+        "type": "object",
+        "title": "User.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "firstName": {
+                    "type": "boolean"
+                  },
+                  "lastName": {
+                    "type": "boolean"
+                  },
+                  "email": {
+                    "type": "boolean"
+                  },
+                  "birthday": {
+                    "type": "boolean"
+                  },
+                  "password": {
+                    "type": "boolean"
+                  },
+                  "created": {
+                    "type": "boolean"
+                  },
+                  "modified": {
+                    "type": "boolean"
+                  },
+                  "tenantId": {
+                    "type": "boolean"
+                  },
+                  "roleId": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "User.Fields"
+          },
+          "include": {
+            "title": "User.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/User.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<User>"
+      },
+      "User.Filter1": {
+        "type": "object",
+        "title": "User.Filter",
+        "properties": {
+          "offset": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "limit": {
+            "type": "integer",
+            "minimum": 1,
+            "example": 100
+          },
+          "skip": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "order": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              }
+            ]
+          },
+          "where": {
+            "title": "User.WhereFilter",
+            "type": "object",
+            "additionalProperties": true
+          },
+          "fields": {
+            "oneOf": [
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "boolean"
+                  },
+                  "firstName": {
+                    "type": "boolean"
+                  },
+                  "lastName": {
+                    "type": "boolean"
+                  },
+                  "email": {
+                    "type": "boolean"
+                  },
+                  "birthday": {
+                    "type": "boolean"
+                  },
+                  "password": {
+                    "type": "boolean"
+                  },
+                  "created": {
+                    "type": "boolean"
+                  },
+                  "modified": {
+                    "type": "boolean"
+                  },
+                  "tenantId": {
+                    "type": "boolean"
+                  },
+                  "roleId": {
+                    "type": "boolean"
+                  }
+                },
+                "additionalProperties": true
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "example": "id"
+                },
+                "uniqueItems": true
+              }
+            ],
+            "title": "User.Fields"
+          },
+          "include": {
+            "title": "User.IncludeFilter",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "$ref": "#/components/schemas/User.IncludeFilter.Items"
+                },
+                {
+                  "type": "string"
+                }
+              ]
+            }
+          }
+        },
+        "additionalProperties": false,
+        "x-typescript-type": "@loopback/repository#Filter<User>"
+      }
+    }
+  }
+}

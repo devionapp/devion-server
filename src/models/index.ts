@@ -1,5 +1,7 @@
+export * from './app.model';
 export * from './flow.model';
 export * from './permission.model';
+export * from './project-app.model';
 export * from './project.model';
 export * from './requirement.model';
 export * from './role-permission.model';
@@ -10,5 +12,4 @@ export * from './tenant.model';
 export * from './user-skill.model';
 export * from './user.model';
 
-export * from './application.model';
-export * from './project-application.model';
+

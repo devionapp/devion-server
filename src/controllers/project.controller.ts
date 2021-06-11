@@ -1,4 +1,4 @@
-import {AuthenticationBindings} from '@loopback/authentication';
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/core';
 import {
   Count,
@@ -23,6 +23,7 @@ import {
   requestBody,
   response
 } from '@loopback/rest';
+import * as _ from 'lodash';
 import {Project, User} from '../models';
 import {ProjectRepository, UserRepository} from '../repositories';
 
@@ -35,27 +36,33 @@ export class ProjectController {
   ) { }
 
   @post('/projects')
+  @authenticate('jwt')
   @response(200, {
     description: 'Project model instance',
-    content: {'application/json': {schema: getModelSchemaRef(Project)}},
   })
   async create(
     @inject(AuthenticationBindings.CURRENT_USER)
     currentUser: User,
-    @requestBody({
-      content: {
-        'application/json': {
-          schema: getModelSchemaRef(Project, {
-            title: 'NewProject',
-          }),
-        },
-      },
-    })
-    project: Omit<Project, 'applications'>,
+    @requestBody()
+    projectData: Project,
   ): Promise<Project> {
-    // const {id} = await this.userRepository.findById(currentUser.id);
-    // project.createdBy = id
-    return this.projectRepository.create(project);
+    const {id, tenantId} = await this.userRepository.findById(currentUser.id);
+
+    projectData.createdBy = id
+    projectData.tenantId = tenantId
+
+    const apps = _.cloneDeep(projectData.apps)
+    delete projectData.apps
+
+    const project = await this.projectRepository.create(projectData);
+
+    if (apps?.length) {
+      apps.forEach(app => {
+        this.projectRepository.apps(project.id).link(app)
+      })
+    }
+
+    return project
   }
 
   @get('/projects/count')
@@ -148,6 +155,17 @@ export class ProjectController {
     @param.path.number('id') id: number,
     @requestBody() project: Project,
   ): Promise<void> {
+
+    this.projectRepository.apps(project.id).delete()
+
+    if (project.apps?.length) {
+      project.apps.forEach(app => {
+        this.projectRepository.apps(project.id).link(app)
+      })
+    }
+
+    delete project.apps
+
     await this.projectRepository.replaceById(id, project);
   }
 

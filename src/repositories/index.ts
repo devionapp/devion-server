@@ -9,6 +9,5 @@ export * from './step.repository';
 export * from './tenant.repository';
 export * from './user-skill.repository';
 export * from './user.repository';
-
-export * from './application.repository';
-export * from './project-application.repository';
+export * from './app.repository';
+export * from './project-app.repository';

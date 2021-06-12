@@ -4,6 +4,7 @@ import {Project} from './project.model';
 
 @model({
   settings: {
+    strict: false,
     foreignKeys: {
       projectId: {
         name: 'fk_requirement_projectId',
@@ -29,10 +30,10 @@ export class Requirement extends Entity {
   id?: number;
 
   @belongsTo(() => Project)
-  projectId: number;
+  projectId?: number;
 
   @belongsTo(() => Flow)
-  flowId: number;
+  flowId?: number;
 
   @property({
     type: 'string',

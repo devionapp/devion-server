@@ -127,11 +127,17 @@ export class ProjectController {
     @param.path.number('id') id: number,
     @param.filter(Project, {exclude: 'where'}) filter?: FilterExcludingWhere<Project>
   ): Promise<Project> {
-    return this.projectRepository.findById(id, {
+    const project = await this.projectRepository.findById(id, {
       include: [
         {relation: 'apps'},
+        {relation: 'requirements'},
       ],
     });
+
+    project.apps = project.apps ?? []
+    project.requirements = project.requirements ?? []
+
+    return Promise.resolve(project)
   }
 
   @patch('/projects/{id}')
@@ -171,7 +177,17 @@ export class ProjectController {
       }))
     }
 
+    await this.projectRepository.requirements(project.id).delete()
+
+    if (project.requirements?.length) {
+      await Promise.all(project.requirements.map(async requirement => {
+        delete requirement.id
+        await this.projectRepository.requirements(project.id).create(requirement)
+      }))
+    }
+
     delete project.apps
+    delete project.requirements
 
     await this.projectRepository.replaceById(id, project);
   }

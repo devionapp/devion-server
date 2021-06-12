@@ -20,7 +20,7 @@ import {
 } from '@loopback/rest';
 import * as _ from 'lodash';
 import {Project, User} from '../models';
-import {ProjectAppRepository, ProjectRepository, UserRepository} from '../repositories';
+import {ProjectAppRepository, ProjectRepository, RequirementRepository, UserRepository} from '../repositories';
 
 export class ProjectController {
   constructor(
@@ -30,6 +30,8 @@ export class ProjectController {
     public projectRepository: ProjectRepository,
     @repository(ProjectAppRepository)
     public projectAppRepository: ProjectAppRepository,
+    @repository(RequirementRepository)
+    public requirementRepository: RequirementRepository,
   ) { }
 
   @post('/projects')
@@ -49,13 +51,41 @@ export class ProjectController {
     projectData.tenantId = tenantId
 
     const apps = _.cloneDeep(projectData.apps)
+    const requirements = _.cloneDeep(projectData.requirements)
+
     delete projectData.apps
+    delete projectData.requirements
 
     const project = await this.projectRepository.create(projectData);
 
     if (apps?.length) {
       await Promise.all(apps.map(async app => {
         await this.projectRepository.apps(project.id).link(app.id)
+      }))
+    }
+
+    if (requirements?.length) {
+      await Promise.all(requirements.map(async requirement => {
+        const fields = requirement.fields
+        const businessRules = requirement.businessRules
+
+        delete requirement.id
+        delete requirement.fields
+        delete requirement.businessRules
+
+        const {id: requirementId} = await this.projectRepository.requirements(project.id).create(requirement)
+
+        if (fields?.length) {
+          await Promise.all(fields?.map(async field => {
+            await this.requirementRepository.fields(requirementId).create(field)
+          }))
+        }
+
+        if (businessRules?.length) {
+          await Promise.all(businessRules?.map(async rule => {
+            await this.requirementRepository.businessRules(requirementId).create(rule)
+          }))
+        }
       }))
     }
 
@@ -130,7 +160,12 @@ export class ProjectController {
     const project = await this.projectRepository.findById(id, {
       include: [
         {relation: 'apps'},
-        {relation: 'requirements'},
+        {
+          relation: 'requirements',
+          scope: {
+            include: ['fields', 'businessRules'],
+          },
+        },
       ],
     });
 
@@ -181,8 +216,33 @@ export class ProjectController {
 
     if (project.requirements?.length) {
       await Promise.all(project.requirements.map(async requirement => {
+        const fields = requirement.fields
+        const businessRules = requirement.businessRules
+
         delete requirement.id
-        await this.projectRepository.requirements(project.id).create(requirement)
+        delete requirement.fields
+        delete requirement.businessRules
+
+        const {id: requirementId} = await this.projectRepository.requirements(project.id).create(requirement)
+
+        await this.requirementRepository.fields(requirementId).delete()
+        await this.requirementRepository.businessRules(requirementId).delete()
+
+        if (fields?.length) {
+          await Promise.all(fields?.map(async field => {
+            delete field.id
+            delete field.requirementId
+            await this.requirementRepository.fields(requirementId).create(field)
+          }))
+        }
+
+        if (businessRules?.length) {
+          await Promise.all(businessRules?.map(async rule => {
+            delete rule.id
+            delete rule.requirementId
+            await this.requirementRepository.businessRules(requirementId).create(rule)
+          }))
+        }
       }))
     }
 

@@ -13,3 +13,5 @@ export * from './user-skill.model';
 export * from './user.model';
 
 
+export * from './field.model';
+export * from './business-rule.model';

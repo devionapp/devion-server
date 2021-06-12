@@ -22,6 +22,8 @@ export async function migrate(args: string[]) {
       'Flow',
       'Step',
       'Requirement',
+      'Field',
+      'BusinessRule',
     ],
   });
 

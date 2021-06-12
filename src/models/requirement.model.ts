@@ -1,4 +1,6 @@
-import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {BusinessRule} from './business-rule.model';
+import {Field} from './field.model';
 import {Flow} from './flow.model';
 import {Project} from './project.model';
 
@@ -45,6 +47,12 @@ export class Requirement extends Entity {
     type: 'string',
   })
   description?: string;
+
+  @hasMany(() => Field)
+  fields?: Field[];
+
+  @hasMany(() => BusinessRule)
+  businessRules?: BusinessRule[];
 
   constructor(data?: Partial<Requirement>) {
     super(data);

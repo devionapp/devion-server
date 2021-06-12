@@ -19,5 +19,5 @@ export * from './user-skill-user.controller';
 export * from './user-skill.controller';
 export * from './user-tenant.controller';
 export * from './user.controller';
-
-
+export * from './requirement-field.controller';
+export * from './requirement-business-rule.controller';

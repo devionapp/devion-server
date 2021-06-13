@@ -118,9 +118,16 @@ export class ProjectController {
     },
   })
   async find(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @param.filter(Project) filter?: Filter<Project>,
   ): Promise<Project[]> {
-    return this.projectRepository.find(filter);
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+    return this.projectRepository.find({
+      where: {
+        tenantId: tenantId,
+      },
+    });
   }
 
   @patch('/projects')

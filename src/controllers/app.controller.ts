@@ -1,37 +1,38 @@
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
-import {App} from '../models';
-import {AppRepository} from '../repositories';
+import {App, User} from '../models';
+import {AppRepository, UserRepository} from '../repositories';
 
 export class AppController {
   constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
     @repository(AppRepository)
-    public appRepository : AppRepository,
-  ) {}
+    public appRepository: AppRepository,
+  ) { }
 
   @post('/apps')
+  @authenticate('jwt')
   @response(200, {
     description: 'App model instance',
     content: {'application/json': {schema: getModelSchemaRef(App)}},
   })
   async create(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @requestBody({
       content: {
         'application/json': {
@@ -44,10 +45,13 @@ export class AppController {
     })
     app: Omit<App, 'id'>,
   ): Promise<App> {
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+    app.tenantId = tenantId
     return this.appRepository.create(app);
   }
 
   @get('/apps/count')
+  @authenticate('jwt')
   @response(200, {
     description: 'App model count',
     content: {'application/json': {schema: CountSchema}},
@@ -59,6 +63,7 @@ export class AppController {
   }
 
   @get('/apps')
+  @authenticate('jwt')
   @response(200, {
     description: 'Array of App model instances',
     content: {
@@ -71,12 +76,20 @@ export class AppController {
     },
   })
   async find(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @param.filter(App) filter?: Filter<App>,
   ): Promise<App[]> {
-    return this.appRepository.find(filter);
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+    return this.appRepository.find({
+      where: {
+        tenantId: tenantId,
+      },
+    });
   }
 
   @patch('/apps')
+  @authenticate('jwt')
   @response(200, {
     description: 'App PATCH success count',
     content: {'application/json': {schema: CountSchema}},

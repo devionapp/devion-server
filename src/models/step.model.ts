@@ -29,12 +29,13 @@ export class Step extends Entity {
     type: 'string',
     required: true,
   })
-  description: string;
+  name: string;
 
   @property({
     type: 'number',
+    required: true,
   })
-  order?: string;
+  index?: string;
 
   // Define well-known properties here
 

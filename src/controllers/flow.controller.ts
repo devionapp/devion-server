@@ -1,37 +1,42 @@
+import {authenticate, AuthenticationBindings} from '@loopback/authentication';
+import {inject} from '@loopback/core';
 import {
   Count,
   CountSchema,
+  DataObject,
   Filter,
   FilterExcludingWhere,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
-  post,
-  param,
-  get,
-  getModelSchemaRef,
-  patch,
-  put,
-  del,
-  requestBody,
-  response,
+  del, get,
+  getModelSchemaRef, param, patch, post, put, requestBody,
+  response
 } from '@loopback/rest';
-import {Flow} from '../models';
-import {FlowRepository} from '../repositories';
+import * as _ from 'lodash';
+import {Flow, Step, User} from '../models';
+import {FlowRepository, StepRepository, UserRepository} from '../repositories';
 
 export class FlowController {
   constructor(
+    @repository(UserRepository)
+    public userRepository: UserRepository,
+    @repository(StepRepository)
+    public stepRepository: StepRepository,
     @repository(FlowRepository)
-    public flowRepository : FlowRepository,
-  ) {}
+    public flowRepository: FlowRepository,
+  ) { }
 
   @post('/flows')
+  @authenticate('jwt')
   @response(200, {
     description: 'Flow model instance',
     content: {'application/json': {schema: getModelSchemaRef(Flow)}},
   })
   async create(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @requestBody({
       content: {
         'application/json': {
@@ -44,7 +49,23 @@ export class FlowController {
     })
     flow: Omit<Flow, 'id'>,
   ): Promise<Flow> {
-    return this.flowRepository.create(flow);
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+
+    flow.tenantId = tenantId
+
+    const steps = _.cloneDeep(flow.steps)
+
+    delete flow.steps
+
+    const newFlow = await this.flowRepository.create(flow);
+
+    if (steps?.length) {
+      await Promise.all(steps?.map(async (step: DataObject<Step>) => {
+        await this.flowRepository.steps(newFlow.id).create(step)
+      }))
+    }
+
+    return newFlow
   }
 
   @get('/flows/count')
@@ -59,6 +80,7 @@ export class FlowController {
   }
 
   @get('/flows')
+  @authenticate('jwt')
   @response(200, {
     description: 'Array of Flow model instances',
     content: {
@@ -71,12 +93,21 @@ export class FlowController {
     },
   })
   async find(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @param.filter(Flow) filter?: Filter<Flow>,
   ): Promise<Flow[]> {
-    return this.flowRepository.find(filter);
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+
+    return this.flowRepository.find({
+      where: {
+        tenantId: tenantId,
+      },
+    });
   }
 
   @patch('/flows')
+  @authenticate('jwt')
   @response(200, {
     description: 'Flow PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -108,7 +139,11 @@ export class FlowController {
     @param.path.number('id') id: number,
     @param.filter(Flow, {exclude: 'where'}) filter?: FilterExcludingWhere<Flow>
   ): Promise<Flow> {
-    return this.flowRepository.findById(id, filter);
+    return this.flowRepository.findById(id, {
+      include: [
+        {relation: 'steps'},
+      ],
+    });
   }
 
   @patch('/flows/{id}')
@@ -130,6 +165,7 @@ export class FlowController {
   }
 
   @put('/flows/{id}')
+  @authenticate('jwt')
   @response(204, {
     description: 'Flow PUT success',
   })
@@ -137,6 +173,16 @@ export class FlowController {
     @param.path.number('id') id: number,
     @requestBody() flow: Flow,
   ): Promise<void> {
+    await this.flowRepository.steps(flow.id).delete()
+
+    if (flow.steps?.length) {
+      await Promise.all(flow.steps?.map(async (step: DataObject<Step>) => {
+        await this.flowRepository.steps(flow.id).create(step)
+      }))
+    }
+
+    delete flow.steps
+
     await this.flowRepository.replaceById(id, flow);
   }
 

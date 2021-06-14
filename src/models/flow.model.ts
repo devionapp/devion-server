@@ -1,5 +1,6 @@
-import {Entity, hasMany, model, property} from '@loopback/repository';
+import {Entity, hasMany, model, property, belongsTo} from '@loopback/repository';
 import {Step} from './step.model';
+import {Tenant} from './tenant.model';
 
 @model({settings: {strict: false, }})
 export class Flow extends Entity {
@@ -14,10 +15,13 @@ export class Flow extends Entity {
     type: 'string',
     required: true,
   })
-  description: string;
+  name: string;
 
   @hasMany(() => Step)
-  steps: Step[];
+  steps?: Step[];
+
+  @belongsTo(() => Tenant)
+  tenantId: number;
   // Define well-known properties here
 
   // Indexer property to allow additional data

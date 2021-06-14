@@ -83,6 +83,7 @@ export class ProjectController {
 
         if (businessRules?.length) {
           await Promise.all(businessRules?.map(async rule => {
+            delete rule.index
             await this.requirementRepository.businessRules(requirementId).create(rule)
           }))
         }
@@ -247,6 +248,7 @@ export class ProjectController {
           await Promise.all(businessRules?.map(async rule => {
             delete rule.id
             delete rule.requirementId
+            delete rule.index
             await this.requirementRepository.businessRules(requirementId).create(rule)
           }))
         }

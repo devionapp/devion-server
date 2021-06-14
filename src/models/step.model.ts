@@ -33,9 +33,8 @@ export class Step extends Entity {
 
   @property({
     type: 'number',
-    required: true,
   })
-  order: string;
+  order?: string;
 
   // Define well-known properties here
 

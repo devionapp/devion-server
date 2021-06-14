@@ -21,3 +21,4 @@ export * from './user-tenant.controller';
 export * from './user.controller';
 export * from './requirement-field.controller';
 export * from './requirement-business-rule.controller';
+export * from './flow.controller';

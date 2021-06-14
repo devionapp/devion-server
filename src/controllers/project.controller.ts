@@ -83,6 +83,7 @@ export class ProjectController {
 
         if (businessRules?.length) {
           await Promise.all(businessRules?.map(async rule => {
+            delete rule.index
             await this.requirementRepository.businessRules(requirementId).create(rule)
           }))
         }
@@ -118,9 +119,16 @@ export class ProjectController {
     },
   })
   async find(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
     @param.filter(Project) filter?: Filter<Project>,
   ): Promise<Project[]> {
-    return this.projectRepository.find(filter);
+    const {tenantId} = await this.userRepository.findById(currentUser.id);
+    return this.projectRepository.find({
+      where: {
+        tenantId: tenantId,
+      },
+    });
   }
 
   @patch('/projects')
@@ -240,6 +248,7 @@ export class ProjectController {
           await Promise.all(businessRules?.map(async rule => {
             delete rule.id
             delete rule.requirementId
+            delete rule.index
             await this.requirementRepository.businessRules(requirementId).create(rule)
           }))
         }

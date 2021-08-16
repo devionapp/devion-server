@@ -24,3 +24,4 @@ export * from './user-skill.controller';
 export * from './user-tenant.controller';
 export * from './user.controller';
 export * from './flow-tenant.controller';
+export * from './step-skill.controller';

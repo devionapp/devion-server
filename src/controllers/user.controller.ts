@@ -142,6 +142,18 @@ export class UserController {
         tenantId: tenantId,
       },
       fields: {password: false},
+      include: [
+        {relation: 'tenant'},
+        {
+          relation: 'role',
+          scope: {
+            include: ['permissions'],
+          },
+        },
+        {
+          relation: 'skills',
+        },
+      ],
     });
   }
 
@@ -204,6 +216,10 @@ export class UserController {
       // Criptografa a senha
       user.password = await this.hasher.hashPassword(user.password);
     }
+
+    delete user.birthday
+    delete user.skills
+
     await this.userRepository.updateById(id, user);
   }
 

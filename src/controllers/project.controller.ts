@@ -72,6 +72,7 @@ export class ProjectController {
         delete requirement.id
         delete requirement.fields
         delete requirement.businessRules
+        delete requirement.flowId
 
         const {id: requirementId} = await this.projectRepository.requirements(project.id).create(requirement)
 

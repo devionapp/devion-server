@@ -1,5 +1,6 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Flow} from './flow.model';
+import {Skill} from './skill.model';
 
 @model({
   settings: {
@@ -36,6 +37,9 @@ export class Step extends Entity {
     required: true,
   })
   index?: string;
+
+  @belongsTo(() => Skill)
+  skillId: number;
 
   // Define well-known properties here
 

@@ -177,6 +177,7 @@ export class FlowController {
 
     if (flow.steps?.length) {
       await Promise.all(flow.steps?.map(async (step: DataObject<Step>) => {
+        delete step.id
         await this.flowRepository.steps(flow.id).create(step)
       }))
     }

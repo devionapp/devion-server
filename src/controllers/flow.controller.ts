@@ -103,6 +103,14 @@ export class FlowController {
       where: {
         tenantId: tenantId,
       },
+      include: [
+        {
+          relation: 'steps',
+          scope: {
+            'order': ['index ASC']
+          },
+        },
+      ],
     });
   }
 
@@ -141,7 +149,12 @@ export class FlowController {
   ): Promise<Flow> {
     return this.flowRepository.findById(id, {
       include: [
-        {relation: 'steps'},
+        {
+          relation: 'steps',
+          scope: {
+            'order': ['index ASC']
+          },
+        },
       ],
     });
   }

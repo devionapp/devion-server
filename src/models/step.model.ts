@@ -1,6 +1,7 @@
-import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property, hasMany} from '@loopback/repository';
 import {Flow} from './flow.model';
 import {Skill} from './skill.model';
+import {Card} from './card.model';
 
 @model({
   settings: {
@@ -41,6 +42,8 @@ export class Step extends Entity {
   @belongsTo(() => Skill)
   skillId: number;
 
+  @hasMany(() => Card)
+  cards: Card[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

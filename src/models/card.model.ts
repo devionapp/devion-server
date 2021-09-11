@@ -1,4 +1,6 @@
-import {Entity, model, property} from '@loopback/repository';
+import {Entity, model, property, belongsTo} from '@loopback/repository';
+import {User} from './user.model';
+import {Requirement} from './requirement.model';
 
 @model({settings: {strict: false}})
 export class Card extends Entity {
@@ -36,6 +38,12 @@ export class Card extends Entity {
     type: 'number',
   })
   stepId?: number;
+
+  @belongsTo(() => User)
+  userId: number;
+
+  @belongsTo(() => Requirement)
+  requirementId: number;
   // Define well-known properties here
 
   // Indexer property to allow additional data

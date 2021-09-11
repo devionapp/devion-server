@@ -212,6 +212,17 @@ export class ProjectController {
     @param.path.number('id') id: number,
     @requestBody() project: Project,
   ): Promise<void> {
+    const projectAux = await this.projectRepository.findById(id, {
+      include: [
+        {relation: 'apps'},
+        {
+          relation: 'requirements',
+          scope: {
+            include: ['fields', 'businessRules'],
+          },
+        },
+      ],
+    });
 
     await this.projectAppRepository.deleteAll({projectId: id})
 
@@ -221,10 +232,19 @@ export class ProjectController {
       }))
     }
 
-    await this.projectRepository.requirements(project.id).delete()
-
+    // EXEMPLO DE SYNC
     if (project.requirements?.length) {
       await Promise.all(project.requirements.map(async requirement => {
+
+        //Caso nao esteja da lista enviada, deleta
+        projectAux.requirements?.map(async req => {
+          const isDeleted = !project.requirements?.some(req2 => req2.id === undefined || req2.id === req.id)
+          if (isDeleted) {
+            await this.projectRepository.requirements(project.id).delete({id: req.id})
+          }
+        })
+
+        const reqId = requirement.id
         const fields = requirement.fields
         const businessRules = requirement.businessRules
 
@@ -232,16 +252,21 @@ export class ProjectController {
         delete requirement.fields
         delete requirement.businessRules
 
-        const {id: requirementId} = await this.projectRepository.requirements(project.id).create(requirement)
 
-        await this.requirementRepository.fields(requirementId).delete()
-        await this.requirementRepository.businessRules(requirementId).delete()
+        if (!reqId) {
+          await this.projectRepository.requirements(project.id).create(requirement)
+        } else {
+          await this.projectRepository.requirements(project.id).patch(requirement, {id: reqId})
+        }
+
+        await this.requirementRepository.fields(reqId).delete()
+        await this.requirementRepository.businessRules(reqId).delete()
 
         if (fields?.length) {
           await Promise.all(fields?.map(async field => {
             delete field.id
             delete field.requirementId
-            await this.requirementRepository.fields(requirementId).create(field)
+            await this.requirementRepository.fields(reqId).create(field)
           }))
         }
 
@@ -250,10 +275,12 @@ export class ProjectController {
             delete rule.id
             delete rule.requirementId
             delete rule.index
-            await this.requirementRepository.businessRules(requirementId).create(rule)
+            await this.requirementRepository.businessRules(reqId).create(rule)
           }))
         }
       }))
+    } else {
+      await this.projectRepository.requirements(project.id).delete()
     }
 
     delete project.apps

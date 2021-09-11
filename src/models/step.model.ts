@@ -1,7 +1,7 @@
-import {belongsTo, Entity, model, property, hasMany} from '@loopback/repository';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {Card} from './card.model';
 import {Flow} from './flow.model';
 import {Skill} from './skill.model';
-import {Card} from './card.model';
 
 @model({
   settings: {
@@ -38,6 +38,12 @@ export class Step extends Entity {
     required: true,
   })
   index?: string;
+
+  @property({
+    type: 'boolean',
+    required: true,
+  })
+  isFinish?: boolean;
 
   @belongsTo(() => Skill)
   skillId: number;

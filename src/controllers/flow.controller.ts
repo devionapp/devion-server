@@ -65,6 +65,13 @@ export class FlowController {
       }))
     }
 
+    // Step "Finalizado"
+    await this.flowRepository.steps(newFlow.id).create({
+      name: 'Finalizado',
+      index: steps.length,
+      isFinish: true,
+    })
+
     return newFlow
   }
 

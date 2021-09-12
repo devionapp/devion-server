@@ -109,6 +109,7 @@ export class FlowController {
     return this.flowRepository.find({
       where: {
         tenantId: tenantId,
+        ...filter?.where
       },
       include: [
         {
@@ -118,7 +119,8 @@ export class FlowController {
           },
         },
       ],
-    });
+    },
+    );
   }
 
   @patch('/flows')

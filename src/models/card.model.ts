@@ -1,6 +1,6 @@
-import {Entity, model, property, belongsTo} from '@loopback/repository';
-import {User} from './user.model';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Requirement} from './requirement.model';
+import {User} from './user.model';
 
 @model({settings: {strict: false}})
 export class Card extends Entity {
@@ -22,6 +22,16 @@ export class Card extends Entity {
     required: true,
   })
   skillLevel: number;
+
+  @property({
+    type: 'number',
+  })
+  estimate: number;
+
+  @property({
+    type: 'number',
+  })
+  performed: number;
 
   @property({
     type: 'string',

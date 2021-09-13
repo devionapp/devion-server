@@ -195,13 +195,41 @@ export class FlowController {
     @param.path.number('id') id: number,
     @requestBody() flow: Flow,
   ): Promise<void> {
-    await this.flowRepository.steps(flow.id).delete()
+    const flowAux = await this.flowRepository.findById(id, {
+      include: [
+        {relation: 'steps'},
+      ],
+    });
 
     if (flow.steps?.length) {
-      await Promise.all(flow.steps?.map(async (step: DataObject<Step>) => {
-        delete step.id
-        await this.flowRepository.steps(flow.id).create(step)
+      await Promise.all(flow.steps.map(async flowStep => {
+        //Caso nao esteja da lista enviada, deleta
+        flowAux.steps?.map(async step => {
+          const isDeleted = !flow.steps?.some(step2 => step2.id === undefined || step2.id === step.id)
+          if (isDeleted) {
+            await this.flowRepository.steps(flow.id).delete({id: step.id})
+          }
+        })
+
+        const stepId = flowStep.id
+        delete flowStep.id
+
+        if (!stepId) {
+          await this.flowRepository.steps(flow.id).create(flowStep)
+        } else {
+          await this.flowRepository.steps(flow.id).patch(flowStep, {id: stepId})
+        }
       }))
+    } else {
+      await this.flowRepository.steps(flow.id).delete()
+    }
+
+    // Step "Finalizado"
+    const stepFinish = await this.flowRepository.steps(flow.id).find({where: {isFinish: true}})
+
+    if (stepFinish?.[0]) {
+      stepFinish[0].index = flow.length + 1
+      await this.flowRepository.steps(flow.id).patch(stepFinish[0], {id: stepFinish[0].id})
     }
 
     delete flow.steps

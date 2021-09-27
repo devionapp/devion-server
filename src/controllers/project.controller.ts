@@ -72,7 +72,6 @@ export class ProjectController {
         delete requirement.id
         delete requirement.fields
         delete requirement.businessRules
-        delete requirement.flowId
 
         const {id: requirementId} = await this.projectRepository.requirements(project.id).create(requirement)
 
@@ -235,7 +234,6 @@ export class ProjectController {
     // EXEMPLO DE SYNC
     if (project.requirements?.length) {
       await Promise.all(project.requirements.map(async requirement => {
-
         //Caso nao esteja da lista enviada, deleta
         projectAux.requirements?.map(async req => {
           const isDeleted = !project.requirements?.some(req2 => req2.id === undefined || req2.id === req.id)
@@ -259,17 +257,34 @@ export class ProjectController {
           await this.projectRepository.requirements(project.id).patch(requirement, {id: reqId})
         }
 
-        await this.requirementRepository.fields(reqId).delete()
-        await this.requirementRepository.businessRules(reqId).delete()
-
+        // SYNC PARA OS FIELDS
+        const fieldsAux = fields?.length ? [...fields] : []
         if (fields?.length) {
-          await Promise.all(fields?.map(async field => {
-            delete field.id
-            delete field.requirementId
-            await this.requirementRepository.fields(reqId).create(field)
+          await Promise.all(fields?.map(async campo => {
+            fieldsAux?.map(async field => {
+              const isDeleted = !fields?.some(field2 => field2.id === undefined || field2.id === field.id)
+              if (isDeleted) {
+                console.log('isdeleted')
+                await this.requirementRepository.fields(reqId).delete({id: field.id})
+              }
+            })
+
+            const fieldId = campo.id
+
+            if (!fieldId) {
+              console.log('create')
+              console.log(reqId)
+              console.log(campo)
+              await this.requirementRepository.fields(reqId).create(campo)
+            } else {
+              console.log('patch')
+              console.log(campo)
+              await this.requirementRepository.fields(reqId).patch(campo, {id: fieldId})
+            }
           }))
         }
 
+        await this.requirementRepository.businessRules(reqId).delete()
         if (businessRules?.length) {
           await Promise.all(businessRules?.map(async rule => {
             delete rule.id

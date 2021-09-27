@@ -37,7 +37,7 @@ export class Step extends Entity {
     type: 'number',
     required: true,
   })
-  index?: string;
+  index?: number;
 
   @property({
     type: 'boolean',

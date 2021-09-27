@@ -68,7 +68,7 @@ export class FlowController {
     // Step "Finalizado"
     await this.flowRepository.steps(newFlow.id).create({
       name: 'Finalizado',
-      index: steps.length,
+      index: steps.length + 1,
       isFinish: true,
     })
 
@@ -228,7 +228,7 @@ export class FlowController {
     const stepFinish = await this.flowRepository.steps(flow.id).find({where: {isFinish: true}})
 
     if (stepFinish?.[0]) {
-      stepFinish[0].index = flow.length + 1
+      stepFinish[0].index = flow.steps ? flow.steps.length + 1 : 1
       await this.flowRepository.steps(flow.id).patch(stepFinish[0], {id: stepFinish[0].id})
     }
 
@@ -242,6 +242,7 @@ export class FlowController {
     description: 'Flow DELETE success',
   })
   async deleteById(@param.path.number('id') id: number): Promise<void> {
+    await this.flowRepository.steps(id).delete()
     await this.flowRepository.deleteById(id);
   }
 }

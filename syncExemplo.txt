@@ -1,0 +1,26 @@
+  if ([lista]?.length) {
+      await Promise.all([lista].map(async requirement => {
+
+        //Caso nao esteja da lista enviada, deleta
+        projectAux.requirements?.map(async req => {
+          const isDeleted = ![lista]?.some(req2 => req2.id === undefined || req2.id === req.id)
+          if (isDeleted) {
+            await this.projectRepository.requirements(project.id).delete({id: req.id})
+          }
+        })
+
+        const reqId = requirement.id
+        const fields = requirement.fields
+        const businessRules = requirement.businessRules
+
+        delete requirement.id
+        delete requirement.fields
+        delete requirement.businessRules
+
+
+        if (!reqId) {
+          await this.projectRepository.requirements(project.id).create(requirement)
+        } else {
+          await this.projectRepository.requirements(project.id).patch(requirement, {id: reqId})
+        }
+      }

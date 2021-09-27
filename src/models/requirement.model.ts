@@ -1,7 +1,6 @@
 import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
 import {BusinessRule} from './business-rule.model';
 import {Field} from './field.model';
-import {Flow} from './flow.model';
 import {Project} from './project.model';
 
 @model({
@@ -13,13 +12,7 @@ import {Project} from './project.model';
         entity: 'Project',
         entityKey: 'id',
         foreignKey: 'projectId',
-      },
-      flowId: {
-        name: 'fk_requirement_flowId',
-        entity: 'Flow',
-        entityKey: 'id',
-        foreignKey: 'flowId',
-      },
+      }
     },
   },
 })
@@ -33,9 +26,6 @@ export class Requirement extends Entity {
 
   @belongsTo(() => Project)
   projectId?: number;
-
-  @belongsTo(() => Flow)
-  flowId?: number;
 
   @property({
     type: 'string',

@@ -1,7 +1,7 @@
 import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {Card} from './card.model';
 import {Step} from './step.model';
 import {Tenant} from './tenant.model';
-import {Card} from './card.model';
 
 @model({settings: {strict: false}})
 export class Flow extends Entity {

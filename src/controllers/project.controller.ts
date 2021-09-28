@@ -209,52 +209,67 @@ export class ProjectController {
     @param.path.number('id') id: number,
     @requestBody() project: Project,
   ): Promise<void> {
-    await this.projectRepository.requirements(id).delete({
-      id: {nin: project.requirements?.map(req => req.id)}
-    })
-
-    project.requirements?.map(async requirement => {
-      //Fields
-      await this.requirementRepository.fields(requirement.id).delete({
-        id: {nin: requirement.fields?.map(field => field.id)}
+    try {
+      await this.projectRepository.requirements(id).delete({
+        id: {nin: project.requirements?.map(req => req.id)}
       })
+      const teste = project.requirements?.flatMap(requirement => requirement.fields?.filter(field => !!field.id).map(field => field.id))
+      console.log(teste)
 
-      requirement.fields?.map(field => {
-        if (field.id) {
-          return this.requirementRepository.fields(requirement.id).patch(field, {id: field.id})
+      project.requirements?.map(async requirement => {
+        //Fields
+        await this.requirementRepository.fields(requirement.id).delete({
+          id: {nin: project.requirements?.flatMap(req => req.fields?.filter(field => !!field.id).map(field => field.id))}
+        })
+
+        requirement.fields?.map(field => {
+          if (field.id) {
+            return this.requirementRepository.fields(requirement.id).patch(field, {id: field.id})
+          }
+          return this.requirementRepository.fields(requirement.id).create(field)
+        })
+
+        delete requirement.fields
+        delete requirement.businessRules
+
+        if (requirement.id) {
+          return this.projectRepository.requirements(id).patch(requirement, {id: requirement.id})
         }
-        return this.requirementRepository.fields(requirement.id).create(field)
+        return this.projectRepository.requirements(id).create(requirement)
       })
 
-      delete requirement.fields
 
-      //BusinessRules
-      await this.requirementRepository.businessRules(requirement.id).delete({
-        id: {nin: requirement.businessRules?.map(businessRule => businessRule.id)}
-      })
+      //   //BusinessRules
+      //   await this.requirementRepository.businessRules(requirement.id).delete({
+      //     requirementId: {eq: requirement.id},
+      //     id: {nin: requirement.businessRules?.map(businessRule => businessRule.id)},
+      //   })
 
-      requirement.businessRules?.map(businessRule => {
-        delete businessRule.index
-        if (businessRule.id) {
-          return this.requirementRepository.businessRules(requirement.id).patch(businessRule, {id: businessRule.id})
-        }
+      //   requirement.businessRules?.map(businessRule => {
+      //     delete businessRule.index
+      //     if (businessRule.id) {
+      //       return this.requirementRepository.businessRules(requirement.id).patch(businessRule, {id: businessRule.id})
+      //     }
 
-        return this.requirementRepository.businessRules(requirement.id).create(businessRule)
-      })
+      //     return this.requirementRepository.businessRules(requirement.id).create(businessRule)
+      //   })
 
-      delete requirement.businessRules
+      //   delete requirement.businessRules
 
-      if (requirement.id) {
-        return this.projectRepository.requirements(id).patch(requirement, {id: requirement.id})
-      }
+      //   if (requirement.id) {
+      //     return this.projectRepository.requirements(id).patch(requirement, {id: requirement.id})
+      //   }
 
-      return this.projectRepository.requirements(id).create(requirement)
-    })
+      //   return this.projectRepository.requirements(id).create(requirement)
+      // })
 
-    delete project.requirements
-    delete project.apps
+      delete project.requirements
+      delete project.apps
 
-    await this.projectRepository.replaceById(id, project);
+      await this.projectRepository.replaceById(id, project);
+    } catch (error) {
+      console.error(error)
+    }
   }
 
   @del('/projects/{id}')

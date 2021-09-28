@@ -21,7 +21,6 @@ import {
 import * as _ from 'lodash';
 import {Project, User} from '../models';
 import {ProjectAppRepository, ProjectRepository, RequirementRepository, UserRepository} from '../repositories';
-
 export class ProjectController {
   constructor(
     @repository(UserRepository)
@@ -54,7 +53,6 @@ export class ProjectController {
     const requirements = _.cloneDeep(projectData.requirements)
 
     delete projectData.apps
-    delete projectData.requirements
 
     const project = await this.projectRepository.create(projectData);
 
@@ -211,95 +209,50 @@ export class ProjectController {
     @param.path.number('id') id: number,
     @requestBody() project: Project,
   ): Promise<void> {
-    const projectAux = await this.projectRepository.findById(id, {
-      include: [
-        {relation: 'apps'},
-        {
-          relation: 'requirements',
-          scope: {
-            include: ['fields', 'businessRules'],
-          },
-        },
-      ],
-    });
+    await this.projectRepository.requirements(id).delete({
+      id: {nin: project.requirements?.map(req => req.id)}
+    })
 
-    await this.projectAppRepository.deleteAll({projectId: id})
+    project.requirements?.map(async requirement => {
+      //Fields
+      await this.requirementRepository.fields(requirement.id).delete({
+        id: {nin: requirement.fields?.map(field => field.id)}
+      })
 
-    if (project.apps?.length) {
-      await Promise.all(project.apps.map(async app => {
-        await this.projectRepository.apps(project.id).link(app.id)
-      }))
-    }
+      requirement.fields?.map(field => {
+        if (field.id) {
+          return this.requirementRepository.fields(requirement.id).patch(field, {id: field.id})
+        }
+        return this.requirementRepository.fields(requirement.id).create(field)
+      })
 
-    // EXEMPLO DE SYNC
-    if (project.requirements?.length) {
-      await Promise.all(project.requirements.map(async requirement => {
-        //Caso nao esteja da lista enviada, deleta
-        projectAux.requirements?.map(async req => {
-          const isDeleted = !project.requirements?.some(req2 => req2.id === undefined || req2.id === req.id)
-          if (isDeleted) {
-            await this.projectRepository.requirements(project.id).delete({id: req.id})
-          }
-        })
+      delete requirement.fields
 
-        const reqId = requirement.id
-        const fields = requirement.fields
-        const businessRules = requirement.businessRules
+      //BusinessRules
+      await this.requirementRepository.businessRules(requirement.id).delete({
+        id: {nin: requirement.businessRules?.map(businessRule => businessRule.id)}
+      })
 
-        delete requirement.id
-        delete requirement.fields
-        delete requirement.businessRules
-
-
-        if (!reqId) {
-          await this.projectRepository.requirements(project.id).create(requirement)
-        } else {
-          await this.projectRepository.requirements(project.id).patch(requirement, {id: reqId})
+      requirement.businessRules?.map(businessRule => {
+        delete businessRule.index
+        if (businessRule.id) {
+          return this.requirementRepository.businessRules(requirement.id).patch(businessRule, {id: businessRule.id})
         }
 
-        // SYNC PARA OS FIELDS
-        const fieldsAux = fields?.length ? [...fields] : []
-        if (fields?.length) {
-          await Promise.all(fields?.map(async campo => {
-            fieldsAux?.map(async field => {
-              const isDeleted = !fields?.some(field2 => field2.id === undefined || field2.id === field.id)
-              if (isDeleted) {
-                console.log('isdeleted')
-                await this.requirementRepository.fields(reqId).delete({id: field.id})
-              }
-            })
+        return this.requirementRepository.businessRules(requirement.id).create(businessRule)
+      })
 
-            const fieldId = campo.id
+      delete requirement.businessRules
 
-            if (!fieldId) {
-              console.log('create')
-              console.log(reqId)
-              console.log(campo)
-              await this.requirementRepository.fields(reqId).create(campo)
-            } else {
-              console.log('patch')
-              console.log(campo)
-              await this.requirementRepository.fields(reqId).patch(campo, {id: fieldId})
-            }
-          }))
-        }
+      if (requirement.id) {
+        return this.projectRepository.requirements(id).patch(requirement, {id: requirement.id})
+      }
 
-        await this.requirementRepository.businessRules(reqId).delete()
-        if (businessRules?.length) {
-          await Promise.all(businessRules?.map(async rule => {
-            delete rule.id
-            delete rule.requirementId
-            delete rule.index
-            await this.requirementRepository.businessRules(reqId).create(rule)
-          }))
-        }
-      }))
-    } else {
-      await this.projectRepository.requirements(project.id).delete()
-    }
+      return this.projectRepository.requirements(id).create(requirement)
+    })
 
-    delete project.apps
     delete project.requirements
+    delete project.apps
 
     await this.projectRepository.replaceById(id, project);
   }

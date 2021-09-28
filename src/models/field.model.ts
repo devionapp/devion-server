@@ -1,4 +1,5 @@
-import {Entity, model, property} from '@loopback/repository';
+import {belongsTo, Entity, model, property} from '@loopback/repository';
+import {Requirement} from './requirement.model';
 
 @model({settings: {strict: false}})
 export class Field extends Entity {
@@ -8,6 +9,9 @@ export class Field extends Entity {
     generated: true,
   })
   id?: number;
+
+  @belongsTo(() => Requirement)
+  requirementId: number;
 
   @property({
     type: 'string',
@@ -35,10 +39,7 @@ export class Field extends Entity {
   })
   rule?: number;
 
-  @property({
-    type: 'number',
-  })
-  requirementId?: number;
+
   // Define well-known properties here
 
   // Indexer property to allow additional data

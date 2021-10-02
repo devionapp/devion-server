@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,11 +13,11 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
   Project,
-  Requirement,
+  Requirement
 } from '../models';
 import {ProjectRepository} from '../repositories';
 
@@ -67,10 +67,12 @@ export class ProjectRequirementController {
       },
     }) requirement: Omit<Requirement, 'id'>,
   ): Promise<Requirement> {
+    delete requirement.fields
+    delete requirement.businessRules
     return this.projectRepository.requirements(id).create(requirement);
   }
 
-  @patch('/projects/{id}/requirements', {
+  @patch('/projects/{id}/requirements/{idRequirement}', {
     responses: {
       '200': {
         description: 'Project.Requirement PATCH success count',
@@ -80,6 +82,7 @@ export class ProjectRequirementController {
   })
   async patch(
     @param.path.number('id') id: number,
+    @param.path.number('idRequirement') idRequirement: number,
     @requestBody({
       content: {
         'application/json': {
@@ -90,10 +93,12 @@ export class ProjectRequirementController {
     requirement: Partial<Requirement>,
     @param.query.object('where', getWhereSchemaFor(Requirement)) where?: Where<Requirement>,
   ): Promise<Count> {
-    return this.projectRepository.requirements(id).patch(requirement, where);
+    delete requirement.fields
+    delete requirement.businessRules
+    return this.projectRepository.requirements(id).patch(requirement, {id: idRequirement});
   }
 
-  @del('/projects/{id}/requirements', {
+  @del('/projects/{id}/requirements/{idRequirement}', {
     responses: {
       '200': {
         description: 'Project.Requirement DELETE success count',
@@ -103,8 +108,9 @@ export class ProjectRequirementController {
   })
   async delete(
     @param.path.number('id') id: number,
+    @param.path.number('idRequirement') idRequirement: number,
     @param.query.object('where', getWhereSchemaFor(Requirement)) where?: Where<Requirement>,
   ): Promise<Count> {
-    return this.projectRepository.requirements(id).delete(where);
+    return this.projectRepository.requirements(id).delete({id: idRequirement});
   }
 }

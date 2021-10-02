@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,11 +13,10 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
-  Requirement,
-  Field,
+  Field, Requirement
 } from '../models';
 import {RequirementRepository} from '../repositories';
 
@@ -93,7 +92,7 @@ export class RequirementFieldController {
     return this.requirementRepository.fields(id).patch(field, where);
   }
 
-  @del('/requirements/{id}/fields', {
+  @del('/requirements/{id}/fields/{fieldId}', {
     responses: {
       '200': {
         description: 'Requirement.Field DELETE success count',
@@ -103,8 +102,9 @@ export class RequirementFieldController {
   })
   async delete(
     @param.path.number('id') id: number,
+    @param.path.number('fieldId') fieldId: number,
     @param.query.object('where', getWhereSchemaFor(Field)) where?: Where<Field>,
   ): Promise<Count> {
-    return this.requirementRepository.fields(id).delete(where);
+    return this.requirementRepository.fields(id).delete({id: fieldId});
   }
 }

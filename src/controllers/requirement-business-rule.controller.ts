@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,11 +13,10 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
-  Requirement,
-  BusinessRule,
+  BusinessRule, Requirement
 } from '../models';
 import {RequirementRepository} from '../repositories';
 
@@ -93,7 +92,7 @@ export class RequirementBusinessRuleController {
     return this.requirementRepository.businessRules(id).patch(businessRule, where);
   }
 
-  @del('/requirements/{id}/business-rules', {
+  @del('/requirements/{id}/business-rules/{businessRuleId}', {
     responses: {
       '200': {
         description: 'Requirement.BusinessRule DELETE success count',
@@ -103,8 +102,9 @@ export class RequirementBusinessRuleController {
   })
   async delete(
     @param.path.number('id') id: number,
+    @param.path.number('businessRuleId') businessRuleId: number,
     @param.query.object('where', getWhereSchemaFor(BusinessRule)) where?: Where<BusinessRule>,
   ): Promise<Count> {
-    return this.requirementRepository.businessRules(id).delete(where);
+    return this.requirementRepository.businessRules(id).delete({id: businessRuleId});
   }
 }

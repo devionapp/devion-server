@@ -25,9 +25,9 @@ export class Field extends Entity {
   type?: string;
 
   @property({
-    type: 'string',
+    type: 'number',
   })
-  min?: string;
+  min?: number;
 
   @property({
     type: 'number',

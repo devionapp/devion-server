@@ -3,6 +3,7 @@ export * from './app.controller';
 export * from './card-requirement.controller';
 export * from './card-user.controller';
 export * from './card.controller';
+export * from './dashboard.controller';
 export * from './flow-card.controller';
 export * from './flow-step.controller';
 export * from './flow-tenant.controller';
@@ -30,4 +31,6 @@ export * from './user-skill-user.controller';
 export * from './user-skill.controller';
 export * from './user-tenant.controller';
 export * from './user.controller';
-
+export * from './project-card.controller';
+export * from './card-project.controller';
+export * from './card-step.controller';

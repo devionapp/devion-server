@@ -18,7 +18,6 @@ import {
   requestBody,
   response
 } from '@loopback/rest';
-import * as _ from 'lodash';
 import {Project, User} from '../models';
 import {ProjectAppRepository, ProjectRepository, RequirementRepository, UserRepository} from '../repositories';
 export class ProjectController {
@@ -42,53 +41,18 @@ export class ProjectController {
     @inject(AuthenticationBindings.CURRENT_USER)
     currentUser: User,
     @requestBody()
-    projectData: Project,
+    project: Project,
   ): Promise<Project> {
     const {id, tenantId} = await this.userRepository.findById(currentUser.id);
 
-    projectData.createdBy = id
-    projectData.tenantId = tenantId
+    project.createdBy = id
+    project.tenantId = tenantId
 
-    const apps = _.cloneDeep(projectData.apps)
-    const requirements = _.cloneDeep(projectData.requirements)
+    delete project.requirements
+    delete project.apps
 
-    delete projectData.apps
+    return this.projectRepository.create(project);
 
-    const project = await this.projectRepository.create(projectData);
-
-    if (apps?.length) {
-      await Promise.all(apps.map(async app => {
-        await this.projectRepository.apps(project.id).link(app.id)
-      }))
-    }
-
-    if (requirements?.length) {
-      await Promise.all(requirements.map(async requirement => {
-        const fields = requirement.fields
-        const businessRules = requirement.businessRules
-
-        delete requirement.id
-        delete requirement.fields
-        delete requirement.businessRules
-
-        const {id: requirementId} = await this.projectRepository.requirements(project.id).create(requirement)
-
-        if (fields?.length) {
-          await Promise.all(fields?.map(async field => {
-            await this.requirementRepository.fields(requirementId).create(field)
-          }))
-        }
-
-        if (businessRules?.length) {
-          await Promise.all(businessRules?.map(async rule => {
-            delete rule.index
-            await this.requirementRepository.businessRules(requirementId).create(rule)
-          }))
-        }
-      }))
-    }
-
-    return project
   }
 
   @get('/projects/count')

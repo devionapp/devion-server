@@ -42,7 +42,7 @@ export class CardController {
   ): Promise<Card> {
     const step = await this.stepRepository.findOne({where: {flowId: card.flowId, index: 1}})
     if (step) {
-      card.stepId = step.id
+      card.stepId = step.id ?? 0
     }
     return this.cardRepository.create(card);
   }

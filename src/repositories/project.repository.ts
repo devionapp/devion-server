@@ -1,11 +1,12 @@
 import {Getter, inject} from '@loopback/core';
 import {BelongsToAccessor, DefaultCrudRepository, HasManyRepositoryFactory, repository, HasManyThroughRepositoryFactory} from '@loopback/repository';
 import {DatabaseDataSource} from '../datasources';
-import {Project, ProjectRelations, Requirement, Tenant, App, ProjectApp} from '../models';
+import {Project, ProjectRelations, Requirement, Tenant, App, ProjectApp, Card} from '../models';
 import {RequirementRepository} from './requirement.repository';
 import {TenantRepository} from './tenant.repository';
 import {ProjectAppRepository} from './project-app.repository';
 import {AppRepository} from './app.repository';
+import {CardRepository} from './card.repository';
 
 export class ProjectRepository extends DefaultCrudRepository<
   Project,
@@ -22,10 +23,14 @@ export class ProjectRepository extends DefaultCrudRepository<
           typeof Project.prototype.id
         >;
 
+  public readonly cards: HasManyRepositoryFactory<Card, typeof Project.prototype.id>;
+
   constructor(
-    @inject('datasources.database') dataSource: DatabaseDataSource, @repository.getter('RequirementRepository') protected requirementRepositoryGetter: Getter<RequirementRepository>, @repository.getter('TenantRepository') protected tenantRepositoryGetter: Getter<TenantRepository>, @repository.getter('ProjectAppRepository') protected projectAppRepositoryGetter: Getter<ProjectAppRepository>, @repository.getter('AppRepository') protected appRepositoryGetter: Getter<AppRepository>,
+    @inject('datasources.database') dataSource: DatabaseDataSource, @repository.getter('RequirementRepository') protected requirementRepositoryGetter: Getter<RequirementRepository>, @repository.getter('TenantRepository') protected tenantRepositoryGetter: Getter<TenantRepository>, @repository.getter('ProjectAppRepository') protected projectAppRepositoryGetter: Getter<ProjectAppRepository>, @repository.getter('AppRepository') protected appRepositoryGetter: Getter<AppRepository>, @repository.getter('CardRepository') protected cardRepositoryGetter: Getter<CardRepository>,
   ) {
     super(Project, dataSource);
+    this.cards = this.createHasManyRepositoryFactoryFor('cards', cardRepositoryGetter,);
+    this.registerInclusionResolver('cards', this.cards.inclusionResolver);
     this.apps = this.createHasManyThroughRepositoryFactoryFor('apps', appRepositoryGetter, projectAppRepositoryGetter,);
     this.registerInclusionResolver('apps', this.apps.inclusionResolver);
     this.tenant = this.createBelongsToAccessorFor('tenant', tenantRepositoryGetter,);

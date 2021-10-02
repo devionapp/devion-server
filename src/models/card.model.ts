@@ -1,6 +1,8 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Requirement} from './requirement.model';
 import {User} from './user.model';
+import {Project} from './project.model';
+import {Step} from './step.model';
 
 @model({settings: {strict: false}})
 export class Card extends Entity {
@@ -43,17 +45,17 @@ export class Card extends Entity {
     type: 'number',
   })
   flowId?: number;
-
-  @property({
-    type: 'number',
-  })
-  stepId?: number;
-
   @belongsTo(() => User)
   userId: number;
 
   @belongsTo(() => Requirement)
   requirementId: number;
+
+  @belongsTo(() => Project)
+  projectId: number;
+
+  @belongsTo(() => Step)
+  stepId: number;
   // Define well-known properties here
 
   // Indexer property to allow additional data

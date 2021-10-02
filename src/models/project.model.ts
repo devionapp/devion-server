@@ -3,6 +3,7 @@ import {App} from './app.model';
 import {ProjectApp} from './project-app.model';
 import {Requirement} from './requirement.model';
 import {Tenant} from './tenant.model';
+import {Card} from './card.model';
 
 @model({
   settings: {
@@ -80,6 +81,9 @@ export class Project extends Entity {
 
   @hasMany(() => App, {through: {model: () => ProjectApp}})
   apps?: App[];
+
+  @hasMany(() => Card)
+  cards: Card[];
 
   constructor(data?: Partial<Project>) {
     super(data);

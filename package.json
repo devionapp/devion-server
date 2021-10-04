@@ -50,14 +50,14 @@
     "!*/__tests__"
   ],
   "dependencies": {
-    "@loopback/authentication": "^7.3.0",
-    "@loopback/authentication-jwt": "^0.9.0",
-    "@loopback/boot": "^3.4.0",
-    "@loopback/core": "^2.16.0",
-    "@loopback/repository": "^3.6.0",
-    "@loopback/rest": "^9.3.0",
-    "@loopback/rest-explorer": "^3.3.0",
-    "@loopback/service-proxy": "^3.2.0",
+    "@loopback/authentication": "^7.3.3",
+    "@loopback/authentication-jwt": "^0.9.3",
+    "@loopback/boot": "^3.4.3",
+    "@loopback/core": "^2.17.0",
+    "@loopback/repository": "^3.7.2",
+    "@loopback/rest": "^10.0.1",
+    "@loopback/rest-explorer": "^3.3.3",
+    "@loopback/service-proxy": "^3.2.3",
     "@types/bcryptjs": "^2.4.2",
     "@types/lodash": "^4.14.168",
     "bcryptjs": "^2.4.3",
@@ -67,14 +67,14 @@
     "tslib": "^2.0.0"
   },
   "devDependencies": {
-    "@loopback/build": "^6.4.0",
-    "@loopback/eslint-config": "^10.2.0",
-    "@loopback/testlab": "^3.4.0",
-    "@types/node": "^10.17.59",
-    "eslint": "^7.25.0",
+    "@loopback/build": "^7.0.1",
+    "@loopback/eslint-config": "^11.0.1",
+    "@loopback/testlab": "^3.4.3",
+    "@types/node": "^10.17.60",
+    "eslint": "^7.32.0",
     "nodemon": "^2.0.7",
-    "source-map-support": "^0.5.19",
+    "source-map-support": "^0.5.20",
     "tsc-watch": "^4.2.9",
-    "typescript": "~4.2.4"
+    "typescript": "~4.3.5"
   }
 }

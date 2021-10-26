@@ -34,3 +34,5 @@ export * from './user.controller';
 export * from './project-card.controller';
 export * from './card-project.controller';
 export * from './card-step.controller';
+export * from './card-flow.controller';
+export * from './card-card-checklist.controller';

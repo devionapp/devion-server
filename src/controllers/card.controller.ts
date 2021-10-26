@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Count,
   CountSchema,
@@ -41,9 +42,15 @@ export class CardController {
     card: Card,
   ): Promise<Card> {
     const step = await this.stepRepository.findOne({where: {flowId: card.flowId, index: 1}})
+
     if (step) {
       card.stepId = step.id ?? 0
     }
+
+    delete card.project
+    delete card.flow
+    delete card.step
+
     return this.cardRepository.create(card);
   }
 
@@ -73,7 +80,20 @@ export class CardController {
   async find(
     @param.filter(Card) filter?: Filter<Card>,
   ): Promise<Card[]> {
-    return this.cardRepository.find(filter);
+    return this.cardRepository.find({
+      where: filter,
+      include: [
+        {
+          relation: 'step',
+        },
+        {
+          relation: 'project',
+        },
+        {
+          relation: 'flow',
+        },
+      ],
+    });
   }
 
   @patch('/cards')
@@ -108,7 +128,19 @@ export class CardController {
     @param.path.number('id') id: number,
     @param.filter(Card, {exclude: 'where'}) filter?: FilterExcludingWhere<Card>
   ): Promise<Card> {
-    return this.cardRepository.findById(id, filter);
+    return this.cardRepository.findById(id, {
+      include: [
+        {
+          relation: 'step',
+        },
+        {
+          relation: 'project',
+        },
+        {
+          relation: 'flow',
+        },
+      ],
+    });
   }
 
   @patch('/cards/{id}')
@@ -126,6 +158,9 @@ export class CardController {
     })
     card: Card,
   ): Promise<void> {
+    delete card.project
+    delete card.flow
+    delete card.step
     await this.cardRepository.updateById(id, card);
   }
 
@@ -137,6 +172,9 @@ export class CardController {
     @param.path.number('id') id: number,
     @requestBody() card: Card,
   ): Promise<void> {
+    delete card.project
+    delete card.flow
+    delete card.step
     await this.cardRepository.replaceById(id, card);
   }
 

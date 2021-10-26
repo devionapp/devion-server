@@ -1,8 +1,10 @@
-import {belongsTo, Entity, model, property} from '@loopback/repository';
-import {Requirement} from './requirement.model';
-import {User} from './user.model';
+import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
+import {CardChecklist} from './card-checklist.model';
+import {Flow} from './flow.model';
 import {Project} from './project.model';
+import {Requirement} from './requirement.model';
 import {Step} from './step.model';
+import {User} from './user.model';
 
 @model({settings: {strict: false}})
 export class Card extends Entity {
@@ -18,6 +20,11 @@ export class Card extends Entity {
     required: true,
   })
   name: string;
+
+  @property({
+    type: 'string',
+  })
+  description: string;
 
   @property({
     type: 'number',
@@ -40,11 +47,6 @@ export class Card extends Entity {
     required: true,
   })
   type: string;
-
-  @property({
-    type: 'number',
-  })
-  flowId?: number;
   @belongsTo(() => User)
   userId: number;
 
@@ -56,6 +58,12 @@ export class Card extends Entity {
 
   @belongsTo(() => Step)
   stepId: number;
+
+  @belongsTo(() => Flow)
+  flowId: number;
+
+  @hasMany(() => CardChecklist)
+  cardChecklists: CardChecklist[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

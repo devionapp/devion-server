@@ -16,3 +16,4 @@ export * from './user.model';
 export * from './field.model';
 export * from './business-rule.model';
 export * from './card.model';
+export * from './card-checklist.model';

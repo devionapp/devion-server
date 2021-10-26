@@ -3,7 +3,7 @@ import {
   CountSchema,
   Filter,
   repository,
-  Where,
+  Where
 } from '@loopback/repository';
 import {
   del,
@@ -13,11 +13,10 @@ import {
   param,
   patch,
   post,
-  requestBody,
+  requestBody
 } from '@loopback/rest';
 import {
-  Flow,
-  Card,
+  Card, Flow
 } from '../models';
 import {FlowRepository} from '../repositories';
 
@@ -42,7 +41,17 @@ export class FlowCardController {
     @param.path.number('id') id: number,
     @param.query.object('filter') filter?: Filter<Card>,
   ): Promise<Card[]> {
-    return this.flowRepository.cards(id).find(filter);
+    return this.flowRepository.cards(id).find({
+      where: filter?.where,
+      include: [
+        {
+          relation: 'step',
+        },
+        {
+          relation: 'project',
+        },
+      ],
+    });
   }
 
   @post('/flows/{id}/cards', {

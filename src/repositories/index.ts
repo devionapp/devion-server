@@ -14,3 +14,4 @@ export * from './project-app.repository';
 export * from './field.repository';
 export * from './business-rule.repository';
 export * from './card.repository';
+export * from './card-checklist.repository';

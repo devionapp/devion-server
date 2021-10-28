@@ -28,6 +28,11 @@ export class Requirement extends Entity {
   projectId?: number;
 
   @property({
+    type: 'boolean',
+  })
+  hasTask?: boolean;
+
+  @property({
     type: 'string',
     required: true,
   })

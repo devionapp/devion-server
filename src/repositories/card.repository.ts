@@ -1,13 +1,14 @@
 import {Getter, inject} from '@loopback/core';
 import {BelongsToAccessor, DefaultCrudRepository, repository, HasManyRepositoryFactory} from '@loopback/repository';
 import {DatabaseDataSource} from '../datasources';
-import {Card, CardRelations, Project, Requirement, Step, User, Flow, CardChecklist} from '../models';
+import {Card, CardRelations, Project, Requirement, Step, User, Flow, CardChecklist, CardTimeLog} from '../models';
 import {ProjectRepository} from './project.repository';
 import {RequirementRepository} from './requirement.repository';
 import {StepRepository} from './step.repository';
 import {UserRepository} from './user.repository';
 import {FlowRepository} from './flow.repository';
 import {CardChecklistRepository} from './card-checklist.repository';
+import {CardTimeLogRepository} from './card-time-log.repository';
 
 export class CardRepository extends DefaultCrudRepository<
   Card,
@@ -27,10 +28,14 @@ export class CardRepository extends DefaultCrudRepository<
 
   public readonly cardChecklists: HasManyRepositoryFactory<CardChecklist, typeof Card.prototype.id>;
 
+  public readonly cardTimeLogs: HasManyRepositoryFactory<CardTimeLog, typeof Card.prototype.id>;
+
   constructor(
-    @inject('datasources.database') dataSource: DatabaseDataSource, @repository.getter('UserRepository') protected userRepositoryGetter: Getter<UserRepository>, @repository.getter('RequirementRepository') protected requirementRepositoryGetter: Getter<RequirementRepository>, @repository.getter('ProjectRepository') protected projectRepositoryGetter: Getter<ProjectRepository>, @repository.getter('StepRepository') protected stepRepositoryGetter: Getter<StepRepository>, @repository.getter('FlowRepository') protected flowRepositoryGetter: Getter<FlowRepository>, @repository.getter('CardChecklistRepository') protected cardChecklistRepositoryGetter: Getter<CardChecklistRepository>,
+    @inject('datasources.database') dataSource: DatabaseDataSource, @repository.getter('UserRepository') protected userRepositoryGetter: Getter<UserRepository>, @repository.getter('RequirementRepository') protected requirementRepositoryGetter: Getter<RequirementRepository>, @repository.getter('ProjectRepository') protected projectRepositoryGetter: Getter<ProjectRepository>, @repository.getter('StepRepository') protected stepRepositoryGetter: Getter<StepRepository>, @repository.getter('FlowRepository') protected flowRepositoryGetter: Getter<FlowRepository>, @repository.getter('CardChecklistRepository') protected cardChecklistRepositoryGetter: Getter<CardChecklistRepository>, @repository.getter('CardTimeLogRepository') protected cardTimeLogRepositoryGetter: Getter<CardTimeLogRepository>,
   ) {
     super(Card, dataSource);
+    this.cardTimeLogs = this.createHasManyRepositoryFactoryFor('cardTimeLogs', cardTimeLogRepositoryGetter,);
+    this.registerInclusionResolver('cardTimeLogs', this.cardTimeLogs.inclusionResolver);
     this.cardChecklists = this.createHasManyRepositoryFactoryFor('cardChecklists', cardChecklistRepositoryGetter,);
     this.registerInclusionResolver('cardChecklists', this.cardChecklists.inclusionResolver);
     this.flow = this.createBelongsToAccessorFor('flow', flowRepositoryGetter,);

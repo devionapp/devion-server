@@ -1,5 +1,6 @@
 import {belongsTo, Entity, hasMany, model, property} from '@loopback/repository';
 import {CardChecklist} from './card-checklist.model';
+import {CardTimeLog} from './card-time-log.model';
 import {Flow} from './flow.model';
 import {Project} from './project.model';
 import {Requirement} from './requirement.model';
@@ -34,11 +35,19 @@ export class Card extends Entity {
 
   @property({
     type: 'number',
+    mysql: {
+      dataType: 'float',
+      precision: 2,
+    }
   })
   estimate: number;
 
   @property({
     type: 'number',
+    mysql: {
+      dataType: 'float',
+      precision: 2,
+    }
   })
   performed: number;
 
@@ -64,6 +73,9 @@ export class Card extends Entity {
 
   @hasMany(() => CardChecklist)
   cardChecklists: CardChecklist[];
+
+  @hasMany(() => CardTimeLog)
+  cardTimeLogs: CardTimeLog[];
   // Define well-known properties here
 
   // Indexer property to allow additional data

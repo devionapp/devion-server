@@ -13,7 +13,7 @@ import {
   response
 } from '@loopback/rest';
 import {Card} from '../models';
-import {CardRepository, StepRepository} from '../repositories';
+import {CardRepository, RequirementRepository, StepRepository} from '../repositories';
 
 export class CardController {
   constructor(
@@ -21,6 +21,8 @@ export class CardController {
     public cardRepository: CardRepository,
     @repository(StepRepository)
     public stepRepository: StepRepository,
+    @repository(RequirementRepository)
+    public requirementRepository: RequirementRepository,
   ) { }
 
   @post('/cards')
@@ -42,10 +44,16 @@ export class CardController {
     card: Card,
   ): Promise<Card> {
     const step = await this.stepRepository.findOne({where: {flowId: card.flowId, index: 1}})
+    const requirement = await this.requirementRepository.findById(card.requirementId)
+    requirement.hasTask = true
+    await this.requirementRepository.updateById(requirement.id, requirement)
 
     if (step) {
       card.stepId = step.id ?? 0
     }
+
+    card.performed = card.performed ?? 0
+    card.estimate = card.estimate ?? 0
 
     delete card.project
     delete card.flow
@@ -175,6 +183,8 @@ export class CardController {
     delete card.project
     delete card.flow
     delete card.step
+    card.performed = card.performed ?? 0
+    card.estimate = card.estimate ?? 0
     await this.cardRepository.replaceById(id, card);
   }
 

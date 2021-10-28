@@ -40,22 +40,22 @@ export class DashboardController {
     const projectsDashboardData: any = [...projects]
 
     return Promise.all(projectsDashboardData.map(async (p: any) => {
-      const cards = (await this.cardRepository.find({where: {projectId: p.id}}))
+      const cards = (await this.cardRepository.find({
+        where: {projectId: p.id, type: 'task'},
+        include: [
+          {
+            relation: 'step'
+          },
+        ],
+      },
+      ))
+
       p.horasEstimadas = cards.reduce((total, i) => total + i.estimate, 0)
       p.horasRealizadas = cards.reduce((total, i) => total + i.performed, 0)
-      p.tarefasFinalizadas = (await this.cardRepository
-        .find({
-          include: [
-            {
-              relation: 'step'
-            },
-          ],
-          where: {projectId: p.id},
-        }))
-        .filter(c => {
-          return c.step.isFinish
-        })
-        .length
+      p.totalTarefas = cards.length
+      p.tarefasFinalizadas = cards.filter(c => {return c.step.isFinish}).length
+      const porcentagem = (100 * p.tarefasFinalizadas) / p.totalTarefas
+      p.porcentagemTarefasFinalizadas = porcentagem ? porcentagem.toFixed(2) : 0
 
       return p
     }))

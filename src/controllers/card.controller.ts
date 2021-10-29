@@ -43,7 +43,7 @@ export class CardController {
     })
     card: Card,
   ): Promise<Card> {
-    const step = await this.stepRepository.findOne({where: {flowId: card.flowId, index: 1}})
+    const step = await this.stepRepository.findOne({where: {flowId: card.flowId, index: 0}}) // Step inicial
     const requirement = await this.requirementRepository.findById(card.requirementId)
     requirement.hasTask = true
     await this.requirementRepository.updateById(requirement.id, requirement)

@@ -1,11 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-
 import {authenticate, AuthenticationBindings} from '@loopback/authentication';
 import {inject} from '@loopback/core';
-import {repository} from '@loopback/repository';
-import {get, response} from '@loopback/rest';
-import {User} from '../models';
-import {CardRepository, ProjectRepository, UserRepository} from '../repositories';
+import {Filter, repository} from '@loopback/repository';
+import {get, param, response} from '@loopback/rest';
+import {Card, User} from '../models';
+import {CardRepository, CardTimeLogRepository, ProjectRepository, UserRepository} from '../repositories';
 
 
 
@@ -18,6 +17,8 @@ export class DashboardController {
     public projectRepository: ProjectRepository,
     @repository(CardRepository)
     public cardRepository: CardRepository,
+    @repository(CardTimeLogRepository)
+    public cardTimeLogRepository: CardTimeLogRepository,
   ) { }
 
   @get('/dashboard/active-projects')
@@ -59,5 +60,31 @@ export class DashboardController {
 
       return p
     }))
+  }
+
+
+  @get('/dashboard/projects-time-registered')
+  @authenticate('jwt')
+  @response(200, {
+    description: 'Dashboard Time',
+  })
+  async projectsTimeRegistered(
+    @inject(AuthenticationBindings.CURRENT_USER)
+    currentUser: User,
+    @param.query.object('filter') filter?: Filter<Card>,
+  ): Promise<any> {
+
+    // const cards = await this.cardTimeLogRepository.find({
+    //   include: [
+    //     {
+    //       relation: 'card'
+    //     },
+    //   ],
+    // })
+
+    // const cardsTask = cards.filter(c => c.card.type === 'task' && c.card.project === filter?.where?.projectId)
+    // const cardsBug = cards.filter(c => c.type === 'bug')
+
+    return
   }
 }

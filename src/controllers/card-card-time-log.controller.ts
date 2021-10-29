@@ -84,14 +84,16 @@ export class CardCardTimeLogController {
       },
     }) cardTimeLog: Omit<CardTimeLog, 'id'>,
   ): Promise<CardTimeLog> {
+    const card = await this.cardRepository.findById(id)
+
     cardTimeLog.userId = currentUser.id
     cardTimeLog.type = 'Manual'
     cardTimeLog.hours = parseInt(cardTimeLog.hours)
     cardTimeLog.minutes = parseInt(cardTimeLog.minutes)
+    cardTimeLog.projectId = card.projectId
 
     const {id: cardTimeLogId} = await this.cardRepository.cardTimeLogs(id).create(cardTimeLog);
 
-    const card = await this.cardRepository.findById(id)
     const cardTimeLogs = (await this.cardRepository.cardTimeLogs(id).find({where: {cardId: id}}))
 
     card.performed = cardTimeLogs.reduce((total, i) => {

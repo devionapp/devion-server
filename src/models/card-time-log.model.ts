@@ -1,6 +1,7 @@
 import {belongsTo, Entity, model, property} from '@loopback/repository';
 import {Card} from './card.model';
 import {User} from './user.model';
+import {Project} from './project.model';
 
 @model({settings: {strict: false}})
 export class CardTimeLog extends Entity {
@@ -31,12 +32,14 @@ export class CardTimeLog extends Entity {
   })
   type?: string;
 
-
   @belongsTo(() => Card)
   cardId: number;
 
   @belongsTo(() => User)
   userId: number;
+
+  @belongsTo(() => Project)
+  projectId: number;
   // Define well-known properties here
 
   // Indexer property to allow additional data

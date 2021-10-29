@@ -38,3 +38,5 @@ export * from './card-flow.controller';
 export * from './card-card-checklist.controller';
 export * from './card-card-time-log.controller';
 export * from './card-time-log-user.controller';
+export * from './card-time-log-card.controller';
+export * from './card-time-log-project.controller';

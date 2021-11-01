@@ -42,3 +42,4 @@ export * from './card-time-log-card.controller';
 export * from './card-time-log-project.controller';
 export * from './notification-user.controller';
 export * from './notification.controller';
+export * from './github.controller';

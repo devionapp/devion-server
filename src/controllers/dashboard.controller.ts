@@ -83,8 +83,8 @@ export class DashboardController {
       ],
     })
 
-    const tasks = cards.filter(c => c.card.type === 'task')
-    const bugs = cards.filter(c => c.card.type === 'bug')
+    const tasks = cards.filter(c => c?.card?.type === 'task')
+    const bugs = cards.filter(c => c?.card?.type === 'bug')
 
     const dashboard = []
     for (let i = 0; i < 7; i++) {
@@ -139,8 +139,8 @@ export class DashboardController {
         ],
       })
 
-      const tasks = timeLog.filter(c => c.card.type === 'task')
-      const bugs = timeLog.filter(c => c.card.type === 'bug')
+      const tasks = timeLog.filter(c => c?.card?.type === 'task')
+      const bugs = timeLog.filter(c => c?.card?.type === 'bug')
       const timeTasks = tasks.reduce((total, t) => {
         const hours = t?.hours ?? 0
         const minutes = (t?.minutes ?? 0) / 60;
@@ -201,7 +201,7 @@ export class DashboardController {
     } else {
       activities = (await this.cardTimeLogRepository.find({
         order: ['date DESC'],
-        limit: 10,
+        limit: 5,
         where: {userId: currentUser.id},
         include: [
           {

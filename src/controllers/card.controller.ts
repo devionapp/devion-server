@@ -183,7 +183,7 @@ export class CardController {
     @param.path.number('id') id: number,
     @requestBody() card: Card,
   ): Promise<void> {
-    const cardAux = await this.cardRepository.findById(card.id);
+    const cardAux = await this.cardRepository.findById(id);
 
     delete card.project
     delete card.flow

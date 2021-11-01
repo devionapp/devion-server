@@ -16,3 +16,4 @@ export * from './business-rule.repository';
 export * from './card.repository';
 export * from './card-checklist.repository';
 export * from './card-time-log.repository';
+export * from './notification.repository';

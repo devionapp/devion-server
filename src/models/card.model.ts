@@ -25,7 +25,7 @@ export class Card extends Entity {
   @property({
     type: 'string',
   })
-  description: string;
+  description?: string;
 
   @property({
     type: 'number',

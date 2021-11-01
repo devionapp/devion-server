@@ -18,3 +18,4 @@ export * from './business-rule.model';
 export * from './card.model';
 export * from './card-checklist.model';
 export * from './card-time-log.model';
+export * from './notification.model';

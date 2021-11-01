@@ -12,9 +12,9 @@ import {
   getModelSchemaRef, param, patch, post, put, requestBody,
   response
 } from '@loopback/rest';
+import moment from 'moment';
 import {Card} from '../models';
-import {CardRepository, RequirementRepository, StepRepository} from '../repositories';
-
+import {CardRepository, NotificationRepository, RequirementRepository, StepRepository} from '../repositories';
 export class CardController {
   constructor(
     @repository(CardRepository)
@@ -23,6 +23,8 @@ export class CardController {
     public stepRepository: StepRepository,
     @repository(RequirementRepository)
     public requirementRepository: RequirementRepository,
+    @repository(NotificationRepository)
+    public notificationRepository: NotificationRepository,
   ) { }
 
   @post('/cards')
@@ -58,6 +60,7 @@ export class CardController {
     delete card.project
     delete card.flow
     delete card.step
+
 
     return this.cardRepository.create(card);
   }
@@ -180,11 +183,23 @@ export class CardController {
     @param.path.number('id') id: number,
     @requestBody() card: Card,
   ): Promise<void> {
+    const cardAux = await this.cardRepository.findById(card.id);
+
     delete card.project
     delete card.flow
     delete card.step
     card.performed = card.performed ?? 0
     card.estimate = card.estimate ?? 0
+
+    if (card.userId !== cardAux.userId) {
+      await this.notificationRepository.create({
+        userId: card.userId,
+        message: `Nova atividade atribuida: <b>${card.name}</b>`,
+        date: moment().format('L'),
+        read: false,
+      })
+    }
+
     await this.cardRepository.replaceById(id, card);
   }
 

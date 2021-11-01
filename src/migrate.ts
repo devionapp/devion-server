@@ -26,7 +26,8 @@ export async function migrate(args: string[]) {
       'BusinessRule',
       'Card',
       'CardChecklist',
-      'CardTimeLog'
+      'CardTimeLog',
+      'Notification',
     ],
   });
 

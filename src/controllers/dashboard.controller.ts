@@ -51,8 +51,8 @@ export class DashboardController {
       },
       ))
 
-      p.horasEstimadas = cards.reduce((total, i) => total + i.estimate, 0)
-      p.horasRealizadas = cards.reduce((total, i) => total + i.performed, 0)
+      p.horasEstimadas = cards.reduce((total, i) => total + i?.estimate, 0)
+      p.horasRealizadas = cards.reduce((total, i) => total + i?.performed, 0)
       p.totalTarefas = cards.length
       p.tarefasFinalizadas = cards.filter(c => {return c.step.isFinish}).length
       const porcentagem = (100 * p.tarefasFinalizadas) / p.totalTarefas

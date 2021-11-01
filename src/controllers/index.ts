@@ -40,3 +40,5 @@ export * from './card-card-time-log.controller';
 export * from './card-time-log-user.controller';
 export * from './card-time-log-card.controller';
 export * from './card-time-log-project.controller';
+export * from './notification-user.controller';
+export * from './notification.controller';
